@@ -5,13 +5,16 @@ import { BrowserRouter } from 'react-router-dom'
 import ThemeContextProvider from './context/ThemeProvider'
 import { store } from './store/store.jsx'
 import { Provider } from 'react-redux'
+import { AuthProvider } from './context/AuthContext'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Provider store={store}>
       <BrowserRouter>
         <ThemeContextProvider>
-          <App />
+          <AuthProvider>
+            <App />
+          </AuthProvider>
         </ThemeContextProvider>
       </BrowserRouter>
     </Provider>

@@ -1,4 +1,5 @@
  import user from "../../assets/images/user.jpg";
+import userProfile from '../../assets/images/avatar/user-profile.png';
 import avatar1 from '../../assets/images/avatar/1.jpg';
 import avatar2 from '../../assets/images/avatar/2.jpg';
 import avatar3 from '../../assets/images/avatar/3.jpg';
@@ -193,6 +194,7 @@ import logoDoc from '../../assets/images/logoDoc.png'
 
 export const IMAGES = {
     user: user,
+    userProfile: userProfile,
     avatar1: avatar1,
     avatar2: avatar2,
     avatar3: avatar3,

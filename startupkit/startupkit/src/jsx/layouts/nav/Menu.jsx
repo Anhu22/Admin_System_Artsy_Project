@@ -1,15 +1,6 @@
 export const MenuList = [
     {
-        title: 'Dashboard', classsChange: 'mm-collapse', iconStyle: <i className="flaticon-home" />,
-        /*content: [
-            { title: 'Dashboard Light', to: 'dashboard' },
-            { title: 'Dashboard Dark', to: 'dashboard-dark' },
-            { title: 'Dashboard 2', to: 'dashboard-2' },
-            { title: 'Projects', to: 'project-page' },
-            { title: 'Contact', to: 'contact' },
-            { title: 'Kanban', to: 'kanban' },
-            { title: 'Message', to: 'message' },
-        ],*/
+        title: 'Dashboard', to: 'dashboard', iconStyle: <i className="flaticon-home" />,
     },
     /*{
         title: 'CMS', classsChange: 'mm-collapse', iconStyle: <i className="flaticon flaticon-cms" />,
@@ -78,11 +69,11 @@ export const MenuList = [
             { title: 'Blog Post', to: 'blog-post', },
             { title: 'Blog Home', to: 'blog-home', },
         ]
-    },*/
-    { title: 'Pricing', to: 'pricing', iconStyle: <i className="flaticon-price-tag" />, },
+    },
+    { title: 'Pricing', to: 'pricing', iconStyle: <i className="flaticon-price-tag" />, },*/
     { title: 'Management', classsChange: 'menu-title', },
     {
-        title: 'Ecommerce', iconStyle: <i className="flaticon-shopping-bag" />, classsChange: 'mm-collapse',
+        title: 'User', classsChange: 'mm-collapse', iconStyle: <i className="flaticon-user" />,
         content: [
             {
                 title: 'Categories', hasMenu: true,

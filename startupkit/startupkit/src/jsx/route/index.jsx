@@ -1,10 +1,10 @@
 import { useContext } from "react";
 import { ThemeContext } from "../../context/ThemeContext";
-import { Routes, Route, Outlet } from "react-router-dom";
+import { Routes, Route, Outlet, Navigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import Nav from "../layouts/nav";
 import Footer from "../layouts/Footer";
 // dashboard 
-import Home from "../pages/dashboard/Home";
 // import DashboardDark from "../pages/dashboard/DashboardDark";
 // import Dashboard2 from "../pages/dashboard/dashboard-2";
 // import Projectpage from "../pages/dashboard/project-page";
@@ -128,16 +128,17 @@ import Home from "../pages/dashboard/Home";
 // // table 
 // import BootstrapTable from "../pages/table/BootstrapTable";
 // import DataTable from "../pages/table/DataTable";
-// // pages 
+// pages
 // import LockScreen from "../pages/error/LockScreen";
 // import Error400 from "../pages/error/Error400";
 // import Error403 from "../pages/error/Error403";
 // import Error404 from "../pages/error/Error404";
 // import Error500 from "../pages/error/Error500";
 // import Error503 from "../pages/error/Error503";
-// import EmptyPage from "../pages/error/emptypage";
-// import Login from "../pages/authentication/Login";
-// import Registration from "../pages/authentication/Registration";
+// import EmptyPage from "../pages/error/emptnypage";
+import Login from "../pages/authentication/Login";
+import Registration from "../pages/authentication/Registration";
+import Home from "../pages/dashboard/Home";
 // import Setting2 from "../layouts/Setting";
 import ScrollToTop from "../element/scrolltotop";
 
@@ -145,16 +146,20 @@ const Markup = () => {
     return (
         <>
             <Routes>
+                <Route path='/login' element={<Login />} />
+                <Route path='/register' element={<Registration />} />
+                <Route element={<MainLayout />}>
+                    <Route path='' element={<Home />} />
+                    <Route path='/dashboard' element={<Home />} />
+                </Route>
                 {/* <Route path='page-lock-screen' element={<LockScreen />} />
                 <Route path='page-error-400' element={<Error400 />} />
                 <Route path='page-error-403' element={<Error403 />} />
                 <Route path='page-error-404' element={<Error404 />} />
                 <Route path='page-error-500' element={<Error500 />} />
                 <Route path='page-error-503' element={<Error503 />} />
-                <Route path='page-login' element={<Login />} />
-                <Route path='page-register' element={<Registration />} /> */}
-                <Route element={<MainLayout />}>
-                    <Route path='' element={<Home />} />
+                <Route path='page-register' element={<Registration />} />*/} 
+                
                     {/* <Route path='dashboard' element={<Home />} />
                     <Route path='dashboard-dark' element={<DashboardDark />} />
                     <Route path='dashboard-2' element={<Dashboard2 />} />
@@ -258,8 +263,8 @@ const Markup = () => {
                     <Route path='form-validation' element={<FormValidation />} />
                     <Route path='table-bootstrap-basic' element={<BootstrapTable />} />
                     <Route path='table-datatable' element={<DataTable />} />
-                    <Route path='empty-page' element={<EmptyPage />} /> */}
-                </Route>
+                    <Route path='empty-page' element={<EmptyPage />} /> 
+                </Routes></Route>*/}
             </Routes>
             <ScrollToTop />
         </>
@@ -268,6 +273,10 @@ const Markup = () => {
 
 function MainLayout() {
     const { menuToggle, sidebariconHover } = useContext(ThemeContext);
+    const { isAuthenticated } = useAuth();
+    if (!isAuthenticated) {
+        return <Navigate to="/login" />;
+    }
     return (
         <>
             <div id="main-wrapper" className={`show ${sidebariconHover ? "iconhover-toggle" : ""} ${menuToggle ? "menu-toggle" : ""}`} >

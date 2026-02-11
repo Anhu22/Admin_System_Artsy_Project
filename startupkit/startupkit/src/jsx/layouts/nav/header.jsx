@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import { Dropdown } from "react-bootstrap";
 import { IMAGES, SVGICON } from "../../constant/theme";
 import { ThemeContext } from "../../../context/ThemeContext";
+import { useAuth } from "../../../context/AuthContext";
 import fscreen from "fscreen";
 
 function Header({ onNote }) {
 	const { background, changeBackground } = useContext(ThemeContext);
+	const { user } = useAuth();
 	const handleThemeMode = () => {
 		if (background.value === 'dark') {
 			changeBackground({ value: "light", label: "Light" });
@@ -225,19 +227,19 @@ function Header({ onNote }) {
 								</Dropdown>
 								<li className="nav-item dropdown header-profile">
 									<Link className="nav-link" to={"#"} role="button" data-bs-toggle="dropdown">
-										<img src={IMAGES.user} width="20" alt="user" />
+									<img src={IMAGES.userProfile} width="20" height="20" alt="user" style={{ borderRadius: '50%', objectFit: 'cover' }} />
 										<div className="header-info ms-3">
-											<span className="fs-14 font-w600 mb-0">Franklin Jr.</span>
+											<span className="fs-14 font-w600 mb-0">{user?.name || "User"}</span>
 										</div>{SVGICON.threeline}
 									</Link>
 									<div className="profile-detail card">
 										<div className="card-body p-0">
 											<div className="d-flex profile-media justify-content-between align-items-center">
 												<div className="d-flex align-items-center">
-													<img src={IMAGES.kprofile} alt="img" />
+											<img src={IMAGES.userProfile} alt="img" style={{ borderRadius: '50%', width: '50px', height: '50px', objectFit: 'cover' }} />
 													<div className="ms-3">
-														<h4 className="mb-0">Franklin Jr. </h4>
-														<p className="mb-0">demo@mail.com</p>
+														<h4 className="mb-0">{user?.name || "User"} </h4>
+														<p className="mb-0">{user?.email || "email@example.com"}</p>
 													</div>
 												</div>
 												<Link to="/edit-profile">

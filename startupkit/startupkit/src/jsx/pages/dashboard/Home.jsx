@@ -1,19 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import Sidebar from "../../../components/Sidebar";
-
-/* ================= LAYOUT WITH SIDEBAR ================= */
-
-const Layout = styled.div`
-  display: flex;
-  min-height: 100vh;
-  background: #f5f6fa;
-`;
+import SideBar from "../../layouts/nav/SideBar";
 
 /* ================= PAGE CONTENT ================= */
 
 const Content = styled.div`
-  flex: 1;
   padding: 24px;
 `;
 
@@ -141,11 +132,7 @@ const Badge = styled.span`
 
 function Home() {
   return (
-    <Layout>
-      {/* ===== SIDEBAR ===== */}
-
-      {/* ===== PAGE CONTENT ===== */}
-      <Content>
+    <Content>
         <PageHeader>
           <Greeting>Good Morning</Greeting>
           <SubText>This is your admin dashboard overview</SubText>
@@ -232,8 +219,7 @@ function Home() {
             </tbody>
           </Table>
         </TableCard>
-      </Content>
-    </Layout>
+    </Content>
   );
 }
 
