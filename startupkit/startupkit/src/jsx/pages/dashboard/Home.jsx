@@ -143,7 +143,6 @@ function Home() {
   return (
     <Layout>
       {/* ===== SIDEBAR ===== */}
-      <Sidebar />
 
       {/* ===== PAGE CONTENT ===== */}
       <Content>
