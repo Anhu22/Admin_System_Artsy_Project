@@ -1,7 +1,7 @@
 export const MenuList = [
     {
         title: 'Dashboard', classsChange: 'mm-collapse', iconStyle: <i className="flaticon-home" />,
-        content: [
+        /*content: [
             { title: 'Dashboard Light', to: 'dashboard' },
             { title: 'Dashboard Dark', to: 'dashboard-dark' },
             { title: 'Dashboard 2', to: 'dashboard-2' },
@@ -9,9 +9,9 @@ export const MenuList = [
             { title: 'Contact', to: 'contact' },
             { title: 'Kanban', to: 'kanban' },
             { title: 'Message', to: 'message' },
-        ],
+        ],*/
     },
-    {
+    /*{
         title: 'CMS', classsChange: 'mm-collapse', iconStyle: <i className="flaticon flaticon-cms" />,
         content: [
             { title: 'Content', to: 'content' },
@@ -49,8 +49,8 @@ export const MenuList = [
             { title: 'Api keys', to: 'account-apikeys' },
             { title: 'Logs', to: 'account-logs' },
         ],
-    },
-    {
+    },*/
+    /*{
         title: 'AIKit', classsChange: 'mm-collapse', iconStyle: <i className="flaticon flaticon-app" />,
         content: [
             { title: 'Auto Write', to: 'auto-write' },
@@ -78,9 +78,9 @@ export const MenuList = [
             { title: 'Blog Post', to: 'blog-post', },
             { title: 'Blog Home', to: 'blog-home', },
         ]
-    },
+    },*/
     { title: 'Pricing', to: 'pricing', iconStyle: <i className="flaticon-price-tag" />, },
-    { title: 'Apps', classsChange: 'menu-title', },
+    { title: 'Management', classsChange: 'menu-title', },
     {
         title: 'Ecommerce', iconStyle: <i className="flaticon-shopping-bag" />, classsChange: 'mm-collapse',
         content: [
