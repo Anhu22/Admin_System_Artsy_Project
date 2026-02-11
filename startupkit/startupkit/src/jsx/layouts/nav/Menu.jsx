@@ -71,10 +71,11 @@ export const MenuList = [
         ]
     },
     { title: 'Pricing', to: 'pricing', iconStyle: <i className="flaticon-price-tag" />, },*/
+    
     { title: 'Management', classsChange: 'menu-title', },
     {
         title: 'User', classsChange: 'mm-collapse', iconStyle: <i className="flaticon-user" />,
-        content: [
+        /*content: [
             {
                 title: 'Categories', hasMenu: true,
                 content: [
@@ -103,20 +104,30 @@ export const MenuList = [
                     { title: 'Customers', to: 'ecom-customers', },
                 ]
             },
-        ]
+        ]*/
     },
     {
-        title: 'Projects', classsChange: 'mm-collapse', iconStyle: <i className="flaticon-rocket" />,
-        content: [
+        title: 'Payment', classsChange: 'mm-collapse', iconStyle: <i className="flaticon-price-tag" />,
+        /*title: 'Projects', classsChange: 'mm-collapse', iconStyle: <i className="flaticon-rocket" />,*/
+        /*content: [
             { title: 'Project List', to: 'project-list', },
             { title: 'Project Card', to: 'project-card', },
             { title: 'Add Project', to: 'add-project', },
-        ],
+        ],*/
     },
-    { title: 'Notes', to: 'note', iconStyle: <i className="flaticon-notes" /> },
-    { title: 'File Manager', to: 'file-manager', iconStyle: <i className="flaticon-approved" /> },
 
+    { title: 'Documents', to: 'file-manager', iconStyle: <i className="flaticon-approved" /> },
+
+    { title: 'Modules and Tests', to: 'note', iconStyle: <i className="flaticon-notes" /> },
+    
+    { title: 'Questions', classsChange: 'menu-title',},
+    { 
+        title: 'Question Bank', iconStyle: <i className="flaticon-file" />,
+    },
     {
+        title: 'Student Submitted', iconStyle: <i className="flaticon-registration" />,
+    },
+    /*{
         title: 'Contacts', iconStyle: <i className="flaticon-phone-book" />, classsChange: 'mm-collapse',
         content: [
             { title: 'Contact List', to: 'contact-list' },
@@ -131,11 +142,14 @@ export const MenuList = [
             { title: 'Read', to: 'email-read' },
         ],
     },
-    { title: 'Calender', iconStyle: <i className="flaticon-calendar-2" />, to: 'calendar' },
-    { title: 'Components', classsChange: 'menu-title', },
+    { title: 'Calender', iconStyle: <i className="flaticon-calendar-2" />, to: 'calendar' },*/
+    { title: 'Configur', classsChange: 'menu-title', },
     {
-        title: 'Charts', iconStyle: <i className="flaticon-bar-chart" />, classsChange: 'mm-collapse',
-        content: [
+        title: 'System Setting', iconStyle: <i className="flaticon flaticon-cms" />,
+    },
+    {
+        title: 'Points Rules', iconStyle: <i className="flaticon-bar-chart" />, classsChange: 'mm-collapse',
+        /*content: [
             { title: 'Rechart', to: 'chart-rechart' },
             { title: 'Chartjs', to: 'chart-chartjs' },
             { title: 'Sparkline', to: 'chart-sparkline' },
@@ -144,11 +158,11 @@ export const MenuList = [
             // { title: 'Morris', to: 'chart-morris' },
             // { title: 'Chart List', to: 'chart-chartlist' },
             // { title: 'Peity', to: 'chart-peity' },
-        ]
+        ]*/
     },
     {
-        title: 'Bootstrap', iconStyle: <i className="flaticon-web" />, classsChange: 'mm-collapse',
-        content: [
+        title: 'Academic Setting', iconStyle: <i className="flaticon-blog" />, classsChange: 'mm-collapse',
+        /*content: [
             { title: 'Accordion', to: 'ui-accordion', },
             { title: 'Alert', to: 'ui-alert', },
             { title: 'Badge', to: 'ui-badge', },
@@ -165,11 +179,11 @@ export const MenuList = [
             { title: 'Typography', to: 'ui-typography', },
             { title: 'Pagination', to: 'ui-pagination', },
             { title: 'Grid', to: 'ui-grid', },
-        ]
+        ]*/
     },
     {
-        title: 'Plugins', iconStyle: <i className="flaticon-puzzle" />, classsChange: 'mm-collapse',
-        content: [
+        title: 'Test Setting', iconStyle: <i className="flaticon-puzzle" />, classsChange: 'mm-collapse',
+        /*content: [
             { title: 'Select 2', to: 'uc-select2' },
             // { title: 'Nestedable', to: 'uc-nestable' },
             { title: 'Noui Slider', to: 'uc-noui-slider' },
@@ -177,10 +191,12 @@ export const MenuList = [
             { title: 'Toastr', to: 'uc-toastr' },
             // { title: 'Jqv Map', to: 'map-jqvmap' },
             { title: 'Light Gallery', to: 'uc-lightgallery' },
-        ]
+        ]*/
     },
-
-    { title: 'Widget', iconStyle: <i className="flaticon-app" />, to: 'widget-basic', },
+    {
+        title: 'Subscription', iconStyle: <i className="flaticon-app" />, classsChange: 'mm-collapse',
+    }
+    /*{ title: 'Widget', iconStyle: <i className="flaticon-web" />, to: 'widget-basic', },
     {
         title: 'Forms', iconStyle: <i className="flaticon-registration" />, classsChange: 'mm-collapse',
         content: [
@@ -199,7 +215,7 @@ export const MenuList = [
         ]
     },
     {
-        title: 'Pages', iconStyle: <i className="flaticon-file" />, classsChange: 'mm-collapse',
+        title: 'Pages', iconStyle: <i className="flaticon flaticon-user-1" />, classsChange: 'mm-collapse',
         content: [
             { title: 'Login', to: 'page-login' },
             { title: 'Register', to: 'page-register' },
@@ -216,5 +232,7 @@ export const MenuList = [
             { title: 'Lock Screen', to: 'page-lock-screen', },
             { title: 'Empty Page', to: 'empty-page', }
         ]
-    },
+    },*/
+
+    
 ]
