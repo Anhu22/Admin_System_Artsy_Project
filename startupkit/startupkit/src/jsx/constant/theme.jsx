@@ -162,7 +162,7 @@ import productpic5 from '../../assets/images/product/pic5.jpg'
 import productpic6 from '../../assets/images/product/pic6.jpg'
 import productpic7 from '../../assets/images/product/pic7.jpg'
 import logo from '../../assets/images/logo.png'
-import logoText from '../../assets/images/logo-text.png'
+/*import logoText from '../../assets/images/logo-text.png'*/
 import qrcode from '../../assets/images/qr.png'
 import avatarpng1 from '../../assets/images/avatar/1.png'
 import avatarpng5 from '../../assets/images/avatar/5.png'
@@ -357,7 +357,7 @@ export const IMAGES = {
     productpic6: productpic6,
     productpic7: productpic7,
     logo: logo,
-    logoText: logoText,
+    /*logoText: logoText,*/
     qrcode: qrcode,
     avatarpng1: avatarpng1,
     avatarpng5: avatarpng5,

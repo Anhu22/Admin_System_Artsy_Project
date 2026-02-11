@@ -6,7 +6,7 @@ import { ThemeContext } from "../../../context/ThemeContext";
 import { useAuth } from "../../../context/AuthContext";
 import fscreen from "fscreen";
 
-function Header({ onNote }) {
+function Header() {
 	const { background, changeBackground } = useContext(ThemeContext);
 	const { user } = useAuth();
 	const handleThemeMode = () => {
@@ -48,7 +48,7 @@ function Header({ onNote }) {
 								</ul>
 							</div>
 							<ul className="navbar-nav header-right">
-								<Dropdown as="li" className="nav-item dropdown notification_dropdown me-3 c-pointer">
+								{/* <Dropdown as="li" className="nav-item dropdown notification_dropdown me-3 c-pointer">
 									<Dropdown.Toggle
 										variant=""
 										as="a"
@@ -133,11 +133,11 @@ function Header({ onNote }) {
 										<Link class="all-notification" to={"#"}>See all notifications <i
 											class="ti-arrow-end"></i></Link>
 									</Dropdown.Menu>
-								</Dropdown>
+								</Dropdown> */}
 								<li className="nav-item dropdown notification_dropdown">
 									<Link className="nav-link dz-fullscreen" to={"#"} onClick={handleFullscreenToggle}> {SVGICON.fullscreen} </Link>
 								</li>
-								<Dropdown
+								{/* <Dropdown
 									as="li"
 									className="nav-item dropdown notification_dropdown"
 								>
@@ -210,8 +210,8 @@ function Header({ onNote }) {
 											</ul>
 										</div>
 									</Dropdown.Menu>
-								</Dropdown>
-								<Dropdown
+								</Dropdown> */}
+								{/* <Dropdown
 									as="li"
 									className="nav-item dropdown notification_dropdown "
 								>
@@ -224,7 +224,7 @@ function Header({ onNote }) {
 										{SVGICON.msgbox}
 										<span className="badge text-white bg-secondary">27</span>
 									</Dropdown.Toggle>
-								</Dropdown>
+								</Dropdown> */}
 								<li className="nav-item dropdown header-profile">
 									<Link className="nav-link" to={"#"} role="button" data-bs-toggle="dropdown">
 									<img src={IMAGES.userProfile} width="20" height="20" alt="user" style={{ borderRadius: '50%', objectFit: 'cover' }} />

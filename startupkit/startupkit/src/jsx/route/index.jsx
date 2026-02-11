@@ -136,10 +136,14 @@ import Footer from "../layouts/Footer";
 // import Error500 from "../pages/error/Error500";
 // import Error503 from "../pages/error/Error503";
 // import EmptyPage from "../pages/error/emptnypage";
+// import Setting2 from "../layouts/Setting";
 import Login from "../pages/authentication/Login";
 import Registration from "../pages/authentication/Registration";
 import Home from "../pages/dashboard/Home";
-// import Setting2 from "../layouts/Setting";
+import AcademicStructure from "../../pages/AcademicStructure";
+import TestSettings from "../../pages/TestSettings";
+import PointSettings from "../../pages/PointSettings";
+import SystemSettings from "../../pages/SystemSettings";
 import ScrollToTop from "../element/scrolltotop";
 
 const Markup = () => {
@@ -151,6 +155,10 @@ const Markup = () => {
                 <Route element={<MainLayout />}>
                     <Route path='' element={<Home />} />
                     <Route path='/dashboard' element={<Home />} />
+                    <Route path='/academic-settings' element={<AcademicStructure />} />
+                    <Route path='/test-settings' element={<TestSettings />} />
+                    <Route path='/point-settings' element={<PointSettings />} />
+                    <Route path='/system-settings' element={<SystemSettings />} />
                 </Route>
                 {/* <Route path='page-lock-screen' element={<LockScreen />} />
                 <Route path='page-error-400' element={<Error400 />} />

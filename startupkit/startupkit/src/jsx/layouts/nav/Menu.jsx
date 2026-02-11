@@ -1,3 +1,5 @@
+import AcademicStructure from "../../../pages/AcademicStructure";
+
 export const MenuList = [
     {
         title: 'Dashboard', to: 'dashboard', iconStyle: <i className="flaticon-home" />,
@@ -145,10 +147,10 @@ export const MenuList = [
     { title: 'Calender', iconStyle: <i className="flaticon-calendar-2" />, to: 'calendar' },*/
     { title: 'Configur', classsChange: 'menu-title', },
     {
-        title: 'System Setting', iconStyle: <i className="flaticon flaticon-cms" />,
+        title: 'System Setting',to: 'system-settings', iconStyle: <i className="flaticon flaticon-cms" />,
     },
     {
-        title: 'Points Rules', iconStyle: <i className="flaticon-bar-chart" />, classsChange: 'mm-collapse',
+        title: 'Points Rules',to: 'point-settings', iconStyle: <i className="flaticon-bar-chart" />, classsChange: 'mm-collapse',
         /*content: [
             { title: 'Rechart', to: 'chart-rechart' },
             { title: 'Chartjs', to: 'chart-chartjs' },
@@ -161,7 +163,7 @@ export const MenuList = [
         ]*/
     },
     {
-        title: 'Academic Setting', iconStyle: <i className="flaticon-blog" />, classsChange: 'mm-collapse',
+        title: 'Academic Setting',to: 'academic-settings' , iconStyle: <i className="flaticon-blog" />, classsChange: 'mm-collapse',
         /*content: [
             { title: 'Accordion', to: 'ui-accordion', },
             { title: 'Alert', to: 'ui-alert', },
@@ -182,7 +184,7 @@ export const MenuList = [
         ]*/
     },
     {
-        title: 'Test Setting', iconStyle: <i className="flaticon-puzzle" />, classsChange: 'mm-collapse',
+        title: 'Test Setting',to: 'test-settings', iconStyle: <i className="flaticon-puzzle" />, classsChange: 'mm-collapse',
         /*content: [
             { title: 'Select 2', to: 'uc-select2' },
             // { title: 'Nestedable', to: 'uc-nestable' },
