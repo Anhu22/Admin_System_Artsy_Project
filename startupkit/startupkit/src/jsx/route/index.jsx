@@ -144,6 +144,8 @@ import AcademicStructure from "../../pages/AcademicStructure";
 import TestSettings from "../../pages/TestSettings";
 import PointSettings from "../../pages/PointSettings";
 import SystemSettings from "../../pages/SystemSettings";
+import UserManagement from "../pages/UserManagement";
+import Payments from "../../pages/Payments";
 import ScrollToTop from "../element/scrolltotop";
 
 const Markup = () => {
@@ -155,6 +157,8 @@ const Markup = () => {
                 <Route element={<MainLayout />}>
                     <Route path='' element={<Home />} />
                     <Route path='/dashboard' element={<Home />} />
+                    <Route path='/user-management' element={<UserManagement />} />
+                    <Route path='/payments' element={<Payments />} />
                     <Route path='/academic-settings' element={<AcademicStructure />} />
                     <Route path='/test-settings' element={<TestSettings />} />
                     <Route path='/point-settings' element={<PointSettings />} />

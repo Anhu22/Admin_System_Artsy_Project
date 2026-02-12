@@ -73,9 +73,8 @@ const Sidebar: React.FC = () => {
   return (
     <div className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
       <div className="sidebar-header">
-        <Link to="/dashboard" className="sidebar-brand">
-          <img src={IMAGES.logo} alt="Logo" className="sidebar-logo" />
-          {!isCollapsed && <span className="sidebar-brand-text">Educareer</span>}
+        <Link to="/dashboard" className="sidebar-brand" aria-label="Dashboard">
+          {!isCollapsed && <span className="sidebar-brand-text">educareer</span>}
         </Link>
         <button
           className="btn btn-link sidebar-toggle"

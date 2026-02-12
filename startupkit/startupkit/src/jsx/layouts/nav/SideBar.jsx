@@ -105,7 +105,7 @@ function SideBar() {
                                                                 >
                                                                     {data.content && data.content.length > 0 ?
                                                                         <>
-                                                                            <Link to={data.to} className={` ${data.hasMenu ? 'has-arrow' : ''} ${data.to === path ? 'mm-active' : ''} `}
+                                                                            <Link to={`/${data.to}`} className={` ${data.hasMenu ? 'has-arrow' : ''} ${data.to === path ? 'mm-active' : ''} `}
                                                                                 onClick={() => { handleSubmenuActive(data.title) }}
                                                                             >
                                                                                 {data.title}
@@ -116,7 +116,7 @@ function SideBar() {
                                                                                         return (
                                                                                             <Fragment key={index}>
                                                                                                 <li >
-                                                                                                    <Link className={`${path === data.to ? "mm-active" : ""}`} to={data.to}>{data.title}</Link>
+                                                                                                    <Link className={`${path === data.to ? "mm-active" : ""}`} to={`/${data.to}`}>{data.title}</Link>
                                                                                                 </li>
                                                                                             </Fragment>
                                                                                         )
@@ -125,7 +125,7 @@ function SideBar() {
                                                                             </Collapse>
                                                                         </>
                                                                         :
-                                                                        <Link to={data.to} className={`${data.to === path ? 'mm-active' : ''}`}> {data.title}  </Link>
+                                                                        <Link to={`/${data.to}`} className={`${data.to === path ? 'mm-active' : ''}`}> {data.title}  </Link>
                                                                     }
                                                                 </li>
                                                             )
@@ -134,7 +134,7 @@ function SideBar() {
                                                 </Collapse>
                                             </>
                                             :
-                                            <Link to={data.to} > {data.iconStyle} <span className="nav-text"> {data.title} </span> </Link>
+                                            <Link to={`/${data.to}`} > {data.iconStyle} <span className="nav-text"> {data.title} </span> </Link>
                                         } 
                                     </li>
                                 )

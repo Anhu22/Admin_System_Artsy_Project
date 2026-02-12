@@ -23,11 +23,14 @@
     "@n8tb1t/use-scroll-position": "^2.0.3",
     "@types/styled-components": "^5.1.36",
     "axios": "^1.8.4",
+    "bootstrap": "^5.3.8",
+    "clsx": "^2.1.1",
     "daterangepicker": "^3.1.0",
     "formik": "^2.4.6",
     "framer-motion": "^12.34.0",
     "fscreen": "^1.2.0",
     "lightgallery": "^2.8.3",
+    "lucide-react": "^0.563.0",
     "nouislider-react": "^3.4.2",
     "react": "^19.0.0",
     "react-apexcharts": "^1.7.0",
@@ -62,6 +65,7 @@
     "sweetalert": "^2.1.2",
     "sweetalert2": "^11.19.1",
     "swiper": "^11.2.6",
+    "tailwind-merge": "^3.4.0",
     "yup": "^1.6.1"
   },
   "devDependencies": {

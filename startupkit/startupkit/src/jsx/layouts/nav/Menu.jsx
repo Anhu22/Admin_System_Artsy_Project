@@ -77,45 +77,12 @@ export const MenuList = [
     { title: 'Management', classsChange: 'menu-title', },
     {
         title: 'User', classsChange: 'mm-collapse', iconStyle: <i className="flaticon-user" />,
-        /*content: [
-            {
-                title: 'Categories', hasMenu: true,
-                content: [
-                    { title: 'Category Table', to: 'category-table', },
-                    { title: 'Add Category', to: 'add-category', },
-                    { title: 'Edit Category', to: 'edit-category', },
-                ]
-            },
-            {
-                title: 'Products', hasMenu: true,
-                content: [
-                    { title: 'Product Table', to: 'product-table', },
-                    { title: 'Add Product', to: 'add-product', },
-                    { title: 'Edit Product', to: 'edit-product', },
-                ]
-            },
-            {
-                title: 'Shop', hasMenu: true,
-                content: [
-                    { title: 'Product Grid', to: 'ecom-product-grid', },
-                    { title: 'Product List', to: 'ecom-product-list', },
-                    { title: 'Product Details', to: 'ecom-product-detail', },
-                    { title: 'Order', to: 'ecom-product-order', },
-                    { title: 'Checkout', to: 'ecom-checkout', },
-                    { title: 'Invoice', to: 'ecom-invoice', },
-                    { title: 'Customers', to: 'ecom-customers', },
-                ]
-            },
-        ]*/
+        content: [
+            { title: 'User Management', to: 'user-management', },
+        ]
     },
     {
-        title: 'Payment', classsChange: 'mm-collapse', iconStyle: <i className="flaticon-price-tag" />,
-        /*title: 'Projects', classsChange: 'mm-collapse', iconStyle: <i className="flaticon-rocket" />,*/
-        /*content: [
-            { title: 'Project List', to: 'project-list', },
-            { title: 'Project Card', to: 'project-card', },
-            { title: 'Add Project', to: 'add-project', },
-        ],*/
+        title: 'Payment', to: 'payments', iconStyle: <i className="flaticon-price-tag" />,
     },
 
     { title: 'Documents', to: 'file-manager', iconStyle: <i className="flaticon-approved" /> },
@@ -124,10 +91,10 @@ export const MenuList = [
     
     { title: 'Questions', classsChange: 'menu-title',},
     { 
-        title: 'Question Bank', iconStyle: <i className="flaticon-file" />,
+        title: 'Question Bank', to: 'question-bank', iconStyle: <i className="flaticon-file" />,
     },
     {
-        title: 'Student Submitted', iconStyle: <i className="flaticon-registration" />,
+        title: 'Student Submitted', to: 'student-submitted', iconStyle: <i className="flaticon-registration" />,
     },
     /*{
         title: 'Contacts', iconStyle: <i className="flaticon-phone-book" />, classsChange: 'mm-collapse',
@@ -147,56 +114,19 @@ export const MenuList = [
     { title: 'Calender', iconStyle: <i className="flaticon-calendar-2" />, to: 'calendar' },*/
     { title: 'Configur', classsChange: 'menu-title', },
     {
-        title: 'System Setting',to: 'system-settings', iconStyle: <i className="flaticon flaticon-cms" />,
+        title: 'System Setting', to: 'system-settings', iconStyle: <i className="flaticon flaticon-cms" />,
     },
     {
-        title: 'Points Rules',to: 'point-settings', iconStyle: <i className="flaticon-bar-chart" />, classsChange: 'mm-collapse',
-        /*content: [
-            { title: 'Rechart', to: 'chart-rechart' },
-            { title: 'Chartjs', to: 'chart-chartjs' },
-            { title: 'Sparkline', to: 'chart-sparkline' },
-            { title: 'Apex Chart', to: 'chart-apexchart' },
-            // { title: 'Flot', to: 'chart-flot' },
-            // { title: 'Morris', to: 'chart-morris' },
-            // { title: 'Chart List', to: 'chart-chartlist' },
-            // { title: 'Peity', to: 'chart-peity' },
-        ]*/
+        title: 'Points Rules', to: 'point-settings', iconStyle: <i className="flaticon-bar-chart" />,
     },
     {
-        title: 'Academic Setting',to: 'academic-settings' , iconStyle: <i className="flaticon-blog" />, classsChange: 'mm-collapse',
-        /*content: [
-            { title: 'Accordion', to: 'ui-accordion', },
-            { title: 'Alert', to: 'ui-alert', },
-            { title: 'Badge', to: 'ui-badge', },
-            { title: 'Button', to: 'ui-button', },
-            { title: 'Modal', to: 'ui-modal', },
-            { title: 'Button Group', to: 'ui-button-group', },
-            { title: 'List Group', to: 'ui-list-group', },
-            { title: 'Cards', to: 'ui-card', },
-            { title: 'Carousel', to: 'ui-carousel', },
-            { title: 'Dropdown', to: 'ui-dropdown', },
-            { title: 'Popover', to: 'ui-popover', },
-            { title: 'Progressbar', to: 'ui-progressbar', },
-            { title: 'Tab', to: 'ui-tab', },
-            { title: 'Typography', to: 'ui-typography', },
-            { title: 'Pagination', to: 'ui-pagination', },
-            { title: 'Grid', to: 'ui-grid', },
-        ]*/
+        title: 'Academic Setting', to: 'academic-settings', iconStyle: <i className="flaticon-blog" />,
     },
     {
-        title: 'Test Setting',to: 'test-settings', iconStyle: <i className="flaticon-puzzle" />, classsChange: 'mm-collapse',
-        /*content: [
-            { title: 'Select 2', to: 'uc-select2' },
-            // { title: 'Nestedable', to: 'uc-nestable' },
-            { title: 'Noui Slider', to: 'uc-noui-slider' },
-            { title: 'Sweet Alert', to: 'uc-sweetalert' },
-            { title: 'Toastr', to: 'uc-toastr' },
-            // { title: 'Jqv Map', to: 'map-jqvmap' },
-            { title: 'Light Gallery', to: 'uc-lightgallery' },
-        ]*/
+        title: 'Test Setting', to: 'test-settings', iconStyle: <i className="flaticon-puzzle" />,
     },
     {
-        title: 'Subscription', iconStyle: <i className="flaticon-app" />, classsChange: 'mm-collapse',
+        title: 'Subscription', to: 'subscription', iconStyle: <i className="flaticon-app" />,
     }
     /*{ title: 'Widget', iconStyle: <i className="flaticon-web" />, to: 'widget-basic', },
     {

@@ -1,4 +1,5 @@
 import Markup from './jsx/route/index';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './jsx/index.css';
 import 'swiper/css';
 import 'swiper/css/pagination';
