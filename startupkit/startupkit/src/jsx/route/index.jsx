@@ -51,6 +51,7 @@ import Footer from "../layouts/Footer";
 // // USER 
 // import AppProfile from "../pages/apps/app-profile";
 // import EditProfile from "../pages/apps/edit-profile";
+import EditProfile from "../pages/apps/edit-profile";
 // import PostDetails from "../pages/apps/post-details";
 // // blog 
 // import BlogPost from "../pages/blog/blog-post";
@@ -145,6 +146,7 @@ import TestSettings from "../../pages/TestSettings";
 import PointSettings from "../../pages/PointSettings";
 import SystemSettings from "../../pages/SystemSettings";
 import UserManagement from "../pages/UserManagement";
+import UserDetails from "../../pages/UserDetails";
 import Payments from "../../pages/Payments";
 import ScrollToTop from "../element/scrolltotop";
 
@@ -158,6 +160,8 @@ const Markup = () => {
                     <Route path='' element={<Home />} />
                     <Route path='/dashboard' element={<Home />} />
                     <Route path='/user-management' element={<UserManagement />} />
+                    <Route path='/user-details/:id' element={<UserDetails />} />
+                    <Route path='/edit-profile/:id' element={<EditProfile />} />
                     <Route path='/payments' element={<Payments />} />
                     <Route path='/academic-settings' element={<AcademicStructure />} />
                     <Route path='/test-settings' element={<TestSettings />} />

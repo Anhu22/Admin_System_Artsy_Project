@@ -3,6 +3,7 @@ import PostsReducer from './reducers/PostsReducer';
 import { thunk } from 'redux-thunk';
 import { AuthReducer } from './reducers/AuthReducer';
 import todoReducers from './reducers/Reducers';
+import userReducer from './reducers/UserReducer';
 const middleware = applyMiddleware(thunk);
 
 const composeEnhancers =
@@ -12,6 +13,7 @@ const reducers = combineReducers({
     posts: PostsReducer,
     auth: AuthReducer,
     todoReducers,
+    userReducer,
 });
 
 
