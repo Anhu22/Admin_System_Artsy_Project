@@ -76,18 +76,18 @@ export const MenuList = [
     
     { title: 'Management', classsChange: 'menu-title', },
     {
-        title: 'User', classsChange: 'mm-collapse', iconStyle: <i className="flaticon-user" />,
-        content: [
+        title: 'User',to: 'user-management', iconStyle: <i className="flaticon-user" />,
+        /*content: [
             { title: 'User Management', to: 'user-management', },
-        ]
+        ]*/
     },
     {
         title: 'Payment', to: 'payments', iconStyle: <i className="flaticon-price-tag" />,
     },
 
-    { title: 'Documents', to: 'file-manager', iconStyle: <i className="flaticon-approved" /> },
+    { title: 'Documents', to: 'documents', iconStyle: <i className="flaticon-approved" /> },
 
-    { title: 'Modules and Tests', to: 'note', iconStyle: <i className="flaticon-notes" /> },
+    { title: 'Modules and Tests', to: 'modules-tests', iconStyle: <i className="flaticon-notes" /> },
     
     { title: 'Questions', classsChange: 'menu-title',},
     { 
@@ -112,7 +112,7 @@ export const MenuList = [
         ],
     },
     { title: 'Calender', iconStyle: <i className="flaticon-calendar-2" />, to: 'calendar' },*/
-    { title: 'Configur', classsChange: 'menu-title', },
+    { title: 'Configure', classsChange: 'menu-title', },
     {
         title: 'System Setting', to: 'system-settings', iconStyle: <i className="flaticon flaticon-cms" />,
     },

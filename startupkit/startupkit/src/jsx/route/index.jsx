@@ -50,8 +50,6 @@ import Footer from "../layouts/Footer";
 // import Import from "../pages/aikit/import";
 // // USER 
 // import AppProfile from "../pages/apps/app-profile";
-// import EditProfile from "../pages/apps/edit-profile";
-import EditProfile from "../pages/apps/edit-profile";
 // import PostDetails from "../pages/apps/post-details";
 // // blog 
 // import BlogPost from "../pages/blog/blog-post";
@@ -148,7 +146,10 @@ import SystemSettings from "../../pages/SystemSettings";
 import UserManagement from "../pages/UserManagement";
 import UserDetails from "../../pages/UserDetails";
 import Payments from "../../pages/Payments";
+import ModulesTests from "../pages/ModulesTests";
 import ScrollToTop from "../element/scrolltotop";
+import EditProfile from "../pages/apps/edit-profile";
+import Documents from "../pages/Documents";
 
 const Markup = () => {
     return (
@@ -167,6 +168,8 @@ const Markup = () => {
                     <Route path='/test-settings' element={<TestSettings />} />
                     <Route path='/point-settings' element={<PointSettings />} />
                     <Route path='/system-settings' element={<SystemSettings />} />
+                    <Route path='/modules-tests' element={<ModulesTests />} />
+                    <Route path='/documents' element={<Documents />} />
                 </Route>
                 {/* <Route path='page-lock-screen' element={<LockScreen />} />
                 <Route path='page-error-400' element={<Error400 />} />

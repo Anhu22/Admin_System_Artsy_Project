@@ -1,41 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled, { createGlobalStyle } from "styled-components";
-import {
-  Search,
-  Filter,
-  ChevronDown,
-  MoreHorizontal,
-  Edit,
-  X,
-  Download,
-  CheckCircle,
-  Clock,
-  Eye,
-  Copy,
-  Trash2,
-  Archive,
-  Link2,
-  Plus,
-  DollarSign,
-  CreditCard,
-  TrendingUp,
-  AlertCircle,
-  Calendar,
-  Mail,
-  Receipt,
-  Printer,
-  RefreshCw,
-  Ban,
-  Check,
-  HelpCircle,
-  ArrowUpRight,
-  ArrowDownRight,
-  FileText,
-  User
-} from "lucide-react";
+import {Search, Filter,ChevronDown,MoreHorizontal,Edit,X,Download,CheckCircle,Clock,Eye,Copy,Trash2,Archive,Link2,Plus,AlertCircle,FileText,BookOpen, File,FileSpreadsheet, Presentation, Image,Star,Crown, Timer, Clock1, Cross,} from "lucide-react";
 
-// Global Styles
 const GlobalStyle = createGlobalStyle`
   * {
     margin: 0;
@@ -50,7 +17,6 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-// Styled Components
 const PageContainer = styled.div`
   display: flex;
   height: 100vh;
@@ -138,113 +104,6 @@ const CreateButton = styled.button`
   }
 `;
 
-// Stats Grid
-const StatsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-
-  @media (max-width: 1024px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media (max-width: 640px) {
-    grid-template-columns: 1fr;
-  }
-`;
-
-const StatsCard = styled.div`
-  background-color: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.75rem;
-  padding: 1.5rem;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  transition: all 0.2s;
-
-  &:hover {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  }
-
-  @media (prefers-color-scheme: dark) {
-    background-color: #1f2937;
-    border-color: #374151;
-  }
-`;
-
-const StatsHeader = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-`;
-
-const StatsTitle = styled.div`
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #6b7280;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-
-  @media (prefers-color-scheme: dark) {
-    color: #9ca3af;
-  }
-`;
-
-const StatsIcon = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  background-color: ${props => props.bg || '#eff6ff'};
-  border-radius: 0.5rem;
-  color: ${props => props.color || '#2563eb'};
-
-  svg {
-    width: 1.25rem;
-    height: 1.25rem;
-  }
-`;
-
-const StatsValue = styled.div`
-  font-size: 1.875rem;
-  font-weight: 600;
-  color: #111827;
-  margin-bottom: 0.5rem;
-
-  @media (prefers-color-scheme: dark) {
-    color: white;
-  }
-`;
-
-const StatsTrend = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 0.875rem;
-  color: ${props => props.positive ? '#10b981' : '#6b7280'};
-
-  svg {
-    width: 1rem;
-    height: 1rem;
-  }
-
-  span {
-    color: #6b7280;
-    margin-left: 0.25rem;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    color: ${props => props.positive ? '#86efac' : '#9ca3af'};
-    
-    span {
-      color: #9ca3af;
-    }
-  }
-`;
-
-// Filter Card
 const FilterCard = styled.div`
   background-color: white;
   border: 1px solid #e5e7eb;
@@ -412,9 +271,95 @@ const ClearButton = styled.button`
   }
 `;
 
-const ExportButton = styled(ClearButton)``;
+const ExportButton = styled(ClearButton)`
+  background-color: #2563eb;  
+  color: white;
+  border-color: #2563eb;
+  &:hover {
+    background-color: #2455ddd3;
+    color: white;
+    }`;
 
-// Table Components
+
+const StatsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+
+  @media (prefers-color-scheme: dark) {
+    border-top-color: #374151;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const StatCard = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background-color: #f9fafb;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #2d3748;
+    border-color: #4b5563;
+  }
+`;
+
+const StatIconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: ${props => props.bg || '#eff6ff'};
+  border-radius: 0.5rem;
+  color: ${props => props.color || '#2563eb'};
+
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+`;
+
+const StatInfo = styled.div`
+  flex: 1;
+`;
+
+const StatLabel = styled.div`
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  @media (prefers-color-scheme: dark) {
+    color: #9ca3af;
+  }
+`;
+
+const StatValue = styled.div`
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+
+  @media (prefers-color-scheme: dark) {
+    color: white;
+  }
+`;
+
+
 const TableContainer = styled.div`
   background-color: white;
   border: 1px solid #e5e7eb;
@@ -496,14 +441,14 @@ const TableCell = styled.td`
   }
 `;
 
-// Payment specific components
-const PaymentInfo = styled.div`
+
+const DocumentInfo = styled.div`
   display: flex;
   align-items: center;
   gap: 0.75rem;
 `;
 
-const PaymentIcon = styled.div`
+const DocumentIcon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -525,12 +470,11 @@ const PaymentIcon = styled.div`
   }
 `;
 
-const PaymentId = styled.div`
-  font-weight: 600;
+const DocumentTitle = styled.div`
+  font-weight: 500;
   color: #111827;
   transition: color 0.2s;
   margin-bottom: 0.25rem;
-  font-family: monospace;
 
   ${TableRow}:hover & {
     color: #2563eb;
@@ -545,25 +489,10 @@ const PaymentId = styled.div`
   }
 `;
 
-const UserInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const UserName = styled.div`
-  font-weight: 500;
-  color: #111827;
-  margin-bottom: 0.25rem;
-
-  @media (prefers-color-scheme: dark) {
-    color: white;
-  }
-`;
-
-const UserEmail = styled.div`
+const DocumentMeta = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.5rem;
   font-size: 0.75rem;
   color: #6b7280;
 
@@ -596,34 +525,106 @@ const Badge = styled.span`
   }
 `;
 
+const TypeBadge = styled(Badge)`
+  background-color: ${props => {
+    switch (props.type) {
+      case 'PDF': return '#fee2e2';
+      case 'Doc': return '#dbeafe';
+      case 'PPT': return '#fef3c7';
+      case 'Excel': return '#dcfce7';
+      case 'Image': return '#f3e8ff';
+      default: return '#f3f4f6';
+    }
+  }};
+  color: ${props => {
+    switch (props.type) {
+      case 'PDF': return '#991b1b';
+      case 'Doc': return '#1e40af';
+      case 'PPT': return '#92400e';
+      case 'Excel': return '#166534';
+      case 'Image': return '#6b21a8';
+      default: return '#374151';
+    }
+  }};
+  border-color: ${props => {
+    switch (props.type) {
+      case 'PDF': return '#fecaca';
+      case 'Doc': return '#bfdbfe';
+      case 'PPT': return '#fde68a';
+      case 'Excel': return '#bbf7d0';
+      case 'Image': return '#e9d5ff';
+      default: return '#e5e7eb';
+    }
+  }};
+
+  @media (prefers-color-scheme: dark) {
+    background-color: ${props => {
+      switch (props.type) {
+        case 'PDF': return 'rgba(220, 38, 38, 0.2)';
+        case 'Doc': return 'rgba(37, 99, 235, 0.2)';
+        case 'PPT': return 'rgba(245, 158, 11, 0.2)';
+        case 'Excel': return 'rgba(22, 163, 74, 0.2)';
+        case 'Image': return 'rgba(147, 51, 234, 0.2)';
+        default: return 'rgba(55, 65, 81, 0.5)';
+      }
+    }};
+    color: ${props => {
+      switch (props.type) {
+        case 'PDF': return '#fca5a5';
+        case 'Doc': return '#93c5fd';
+        case 'PPT': return '#fcd34d';
+        case 'Excel': return '#86efac';
+        case 'Image': return '#d8b4fe';
+        default: return '#d1d5db';
+      }
+    }};
+    border-color: ${props => {
+      switch (props.type) {
+        case 'PDF': return 'rgba(220, 38, 38, 0.3)';
+        case 'Doc': return 'rgba(37, 99, 235, 0.3)';
+        case 'PPT': return 'rgba(245, 158, 11, 0.3)';
+        case 'Excel': return 'rgba(22, 163, 74, 0.3)';
+        case 'Image': return 'rgba(147, 51, 234, 0.3)';
+        default: return 'rgba(75, 85, 99, 0.5)';
+      }
+    }};
+  }
+`;
+
+const SemesterBadge = styled(Badge)`
+  background-color: #f3f4f6;
+  color: #374151;
+  border-color: #e5e7eb;
+
+  @media (prefers-color-scheme: dark) {
+    background-color: rgba(55, 65, 81, 0.5);
+    color: #d1d5db;
+    border-color: rgba(75, 85, 99, 0.5);
+  }
+`;
+
 const StatusBadge = styled(Badge)`
   background-color: ${props => {
     switch (props.status) {
-      case 'Completed': return '#ecfdf5';
+      case 'Active': return '#ecfdf5';
       case 'Pending': return '#fefce8';
-      case 'Failed':
-      case 'Refunded': return '#fef2f2';
-      case 'Processing': return '#eff6ff';
+      case 'Disabled':return '#fef2f2';
       default: return '#f9fafb';
     }
   }};
   color: ${props => {
     switch (props.status) {
-      case 'Completed': return '#047857';
+      case 'Active': return '#047857';
       case 'Pending': return '#b45309';
-      case 'Failed':
-      case 'Refunded': return '#b91c1c';
-      case 'Processing': return '#1e40af';
+      case 'Disabled':return '#b91c1c';
       default: return '#374151';
     }
   }};
   border-color: ${props => {
     switch (props.status) {
-      case 'Completed': return '#a7f3d0';
+      case 'Active': return '#a7f3d0';
       case 'Pending': return '#fde68a';
-      case 'Failed':
-      case 'Refunded': return '#fecaca';
-      case 'Processing': return '#bfdbfe';
+      case 'Disabled': return '#fecaca';
       default: return '#e5e7eb';
     }
   }};
@@ -631,47 +632,40 @@ const StatusBadge = styled(Badge)`
   @media (prefers-color-scheme: dark) {
     background-color: ${props => {
       switch (props.status) {
-        case 'Completed': return 'rgba(16, 185, 129, 0.2)';
+        case 'Active': return 'rgba(16, 185, 129, 0.2)';
         case 'Pending': return 'rgba(245, 158, 11, 0.2)';
-        case 'Failed':
-        case 'Refunded': return 'rgba(220, 38, 38, 0.2)';
-        case 'Processing': return 'rgba(37, 99, 235, 0.2)';
+        case 'Disabled':return 'rgba(220, 38, 38, 0.2)';
         default: return 'rgba(55, 65, 81, 0.5)';
       }
     }};
     color: ${props => {
       switch (props.status) {
-        case 'Completed': return '#86efac';
+        case 'Active': return '#86efac';
         case 'Pending': return '#fcd34d';
-        case 'Failed':
-        case 'Refunded': return '#fca5a5';
-        case 'Processing': return '#93c5fd';
+        case 'Disabled':return '#fca5a5';
         default: return '#d1d5db';
       }
     }};
     border-color: ${props => {
       switch (props.status) {
-        case 'Completed': return 'rgba(16, 185, 129, 0.3)';
+        case 'Active': return 'rgba(16, 185, 129, 0.3)';
         case 'Pending': return 'rgba(245, 158, 11, 0.3)';
-        case 'Failed':
-        case 'Refunded': return 'rgba(220, 38, 38, 0.3)';
-        case 'Processing': return 'rgba(37, 99, 235, 0.3)';
+        case 'Disabled':return 'rgba(220, 38, 38, 0.3)';
         default: return 'rgba(75, 85, 99, 0.5)';
       }
     }};
   }
 `;
 
-const AmountBadge = styled(Badge)`
-  background-color: #f9fafb;
-  color: #111827;
-  border-color: #e5e7eb;
-  font-weight: 600;
+const PaidBadge = styled(Badge)`
+  background-color: ${props => props.paid === 'Free' ? '#f9fafb' : '#eff6ff'};
+  color: ${props => props.paid === 'Free' ? '#374151' : '#1e40af'};
+  border-color: ${props => props.paid === 'Free' ? '#e5e7eb' : '#bfdbfe'};
 
   @media (prefers-color-scheme: dark) {
-    background-color: rgba(55, 65, 81, 0.5);
-    color: white;
-    border-color: rgba(75, 85, 99, 0.5);
+    background-color: ${props => props.paid === 'Free' ? 'rgba(55, 65, 81, 0.5)' : 'rgba(37, 99, 235, 0.2)'};
+    color: ${props => props.paid === 'Free' ? '#d1d5db' : '#93c5fd'};
+    border-color: ${props => props.paid === 'Free' ? 'rgba(75, 85, 99, 0.5)' : 'rgba(37, 99, 235, 0.3)'};
   }
 `;
 
@@ -711,7 +705,7 @@ const ActionButton = styled.button`
   }
 `;
 
-const ViewButton = styled(ActionButton)`
+const EditButton = styled(ActionButton)`
   &:hover {
     background-color: #eff6ff;
     color: #2563eb;
@@ -788,7 +782,6 @@ const PageButton = styled.button`
   }
 `;
 
-// Empty State
 const EmptyState = styled.div`
   padding: 3rem 1.5rem;
   text-align: center;
@@ -870,7 +863,7 @@ const ClearFilterButton = styled.button`
   }
 `;
 
-// Context Menu
+
 const ContextMenuOverlay = styled.div`
   position: fixed;
   inset: 0;
@@ -939,174 +932,106 @@ const ContextMenuDivider = styled.div`
   }
 `;
 
-// Helper functions
-const getStatusIcon = (status) => {
-  switch (status) {
-    case 'Completed':
-      return <CheckCircle />;
-    case 'Pending':
-      return <Clock />;
-    case 'Failed':
-      return <X />;
-    case 'Refunded':
-      return <RefreshCw />;
-    case 'Processing':
-      return <HelpCircle />;
+
+const getDocumentIcon = (type) => {
+  switch (type?.toLowerCase()) {
+    case 'pdf':
+      return <FileText />;
+    case 'doc':
+    case 'docx':
+      return <File />;
+    case 'ppt':
+    case 'pptx':
+      return <Presentation />;
+    case 'xls':
+    case 'xlsx':
+      return <FileSpreadsheet />;
+    case 'jpg':
+    case 'png':
+    case 'image':
+      return <Image />;
     default:
-      return <Check />;
+      return <BookOpen />;
   }
 };
 
-const getPaymentIcon = (id) => {
-  const colors = [
-    { bg: '#eff6ff', color: '#2563eb', darkBg: 'rgba(37, 99, 235, 0.2)', darkColor: '#60a5fa' },
-    { bg: '#fef3c7', color: '#d97706', darkBg: 'rgba(245, 158, 11, 0.2)', darkColor: '#fbbf24' },
-    { bg: '#ecfdf5', color: '#059669', darkBg: 'rgba(16, 185, 129, 0.2)', darkColor: '#34d399' },
-    { bg: '#f3e8ff', color: '#9333ea', darkBg: 'rgba(147, 51, 234, 0.2)', darkColor: '#c084fc' },
-  ];
-  const index = id?.length % colors.length || 0;
-  return colors[index];
+const getDocumentIconColors = (type) => {
+  switch (type?.toLowerCase()) {
+    case 'pdf':
+      return { bg: '#fee2e2', color: '#dc2626', darkBg: 'rgba(220, 38, 38, 0.2)', darkColor: '#f87171' };
+    case 'doc':
+    case 'docx':
+      return { bg: '#dbeafe', color: '#2563eb', darkBg: 'rgba(37, 99, 235, 0.2)', darkColor: '#60a5fa' };
+    case 'ppt':
+    case 'pptx':
+      return { bg: '#fef3c7', color: '#d97706', darkBg: 'rgba(245, 158, 11, 0.2)', darkColor: '#fbbf24' };
+    case 'xls':
+    case 'xlsx':
+      return { bg: '#dcfce7', color: '#16a34a', darkBg: 'rgba(22, 163, 74, 0.2)', darkColor: '#4ade80' };
+    case 'jpg':
+    case 'png':
+    case 'image':
+      return { bg: '#f3e8ff', color: '#9333ea', darkBg: 'rgba(147, 51, 234, 0.2)', darkColor: '#c084fc' };
+    default:
+      return { bg: '#f3f4f6', color: '#6b7280', darkBg: 'rgba(55, 65, 81, 0.5)', darkColor: '#9ca3af' };
+  }
 };
 
-const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', { 
-    year: 'numeric', 
-    month: 'short', 
-    day: 'numeric' 
-  });
-};
+{/*const getPaidIcon = (paid) => {
+  return paid === 'Paid' ? <DollarSign /> : <Zap />;
+};*/}
 
 // Mock data
-const mockPayments = [
-  { 
-    id: "PAY-001", 
-    user: "John Doe", 
-    email: "john.doe@example.com",
-    amount: 250.00, 
-    date: "2026-02-10", 
-    status: "Completed",
-    method: "Credit Card",
-    invoice: "INV-2026-001"
-  },
-  { 
-    id: "PAY-002", 
-    user: "Jane Smith", 
-    email: "jane.smith@example.com",
-    amount: 180.00, 
-    date: "2026-02-09", 
-    status: "Completed",
-    method: "PayPal",
-    invoice: "INV-2026-002"
-  },
-  { 
-    id: "PAY-003", 
-    user: "Bob Wilson", 
-    email: "bob.wilson@example.com",
-    amount: 320.00, 
-    date: "2026-02-08", 
-    status: "Pending",
-    method: "Credit Card",
-    invoice: "INV-2026-003"
-  },
-  { 
-    id: "PAY-004", 
-    user: "Alice Brown", 
-    email: "alice.brown@example.com",
-    amount: 150.00, 
-    date: "2026-02-07", 
-    status: "Failed",
-    method: "Debit Card",
-    invoice: "INV-2026-004"
-  },
-  { 
-    id: "PAY-005", 
-    user: "Charlie Lee", 
-    email: "charlie.lee@example.com",
-    amount: 425.50, 
-    date: "2026-02-06", 
-    status: "Completed",
-    method: "Credit Card",
-    invoice: "INV-2026-005"
-  },
-  { 
-    id: "PAY-006", 
-    user: "Diana Prince", 
-    email: "diana.prince@example.com",
-    amount: 89.99, 
-    date: "2026-02-05", 
-    status: "Processing",
-    method: "PayPal",
-    invoice: "INV-2026-006"
-  },
-  { 
-    id: "PAY-007", 
-    user: "Bruce Wayne", 
-    email: "bruce.wayne@example.com",
-    amount: 599.99, 
-    date: "2026-02-04", 
-    status: "Refunded",
-    method: "Credit Card",
-    invoice: "INV-2026-007"
-  },
+const mockDocuments = [
+  { id: 1, title: "Data Structure and Algorithm Hand Written Notes", type: "PDF", semester: "3rd", subject: "DSA", paid: "Free", status: "Active",size: "2.4 MB", pages: 45, downloads: 234},
+  { id: 2, title: "Data Structure and Algorithm Textbook", type: "PDF", semester: "3rd", subject: "DSA", paid: "Paid", status: "Active",size: "15.2 MB",pages: 450,downloads: 89},
+  { id: 3, title: "OOP Concept Summary", type: "Doc", semester: "3rd", subject: "OOP", paid: "Free", status: "Disabled",size: "1.1 MB", pages: 12,downloads: 0},
+  { id: 4, title: "SQL Important Queries", type: "PDF", semester: "5th", subject: "DBMS", paid: "Paid", status: "Active",size: "3.7 MB",pages: 78,downloads: 15},
+  { id: 5, title: "Computer Networks Lab Manual", type: "PDF", semester: "6th", subject: "CN", paid: "Free", status: "Active",size: "5.3 MB",pages: 120,downloads: 41},
+  { id: 6, title: "Operating Systems Lecture Slides", type: "PPT", semester: "4th", subject: "OS", paid: "Free", status: "Pending",size: "8.9 MB",pages: 65,downloads: 17}
 ];
 
-const Payments = () => {
+const DocumentsNotes = () => {
   const navigate = useNavigate();
-  const [payments, setPayments] = useState([]);
+  const [documents, setDocuments] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [search, setSearch] = useState("");
+  const [subjectFilter, setSubjectFilter] = useState("All");
   const [statusFilter, setStatusFilter] = useState("All");
-  const [dateFilter, setDateFilter] = useState("All");
+  const [typeFilter, setTypeFilter] = useState("All");
   const [contextMenu, setContextMenu] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
-    setPayments(mockPayments);
+    setDocuments(mockDocuments);
   }, []);
 
   useEffect(() => {
-    let result = payments;
+    let result = documents;
     
-    if (statusFilter !== "All") {
-      result = result.filter(p => p.status === statusFilter);
+    if (subjectFilter !== "All") {
+      result = result.filter(doc => doc.subject === subjectFilter);
     }
     
-    if (dateFilter !== "All") {
-      const now = new Date();
-      const today = new Date(now.setHours(0, 0, 0, 0));
-      const weekAgo = new Date(today);
-      weekAgo.setDate(weekAgo.getDate() - 7);
-      const monthAgo = new Date(today);
-      monthAgo.setMonth(monthAgo.getMonth() - 1);
+    if (statusFilter !== "All") {
+      result = result.filter(doc => doc.status === statusFilter);
+    }
 
-      result = result.filter(p => {
-        const paymentDate = new Date(p.date);
-        switch (dateFilter) {
-          case 'Today':
-            return paymentDate >= today;
-          case 'This Week':
-            return paymentDate >= weekAgo;
-          case 'This Month':
-            return paymentDate >= monthAgo;
-          default:
-            return true;
-        }
-      });
+    if (typeFilter !== "All") {
+      result = result.filter(doc => doc.type === typeFilter);
     }
     
     if (search) {
       const t = search.toLowerCase();
-      result = result.filter(p => 
-        p.id.toLowerCase().includes(t) || 
-        p.user.toLowerCase().includes(t) ||
-        p.email.toLowerCase().includes(t) ||
-        p.invoice.toLowerCase().includes(t)
+      result = result.filter(doc => 
+        doc.title.toLowerCase().includes(t) || 
+        doc.subject.toLowerCase().includes(t) ||
+        doc.type.toLowerCase().includes(t)
       );
     }
     
     setFiltered(result);
-  }, [payments, statusFilter, dateFilter, search]);
+  }, [documents, subjectFilter, statusFilter, typeFilter, search]);
 
   const openContext = (e, item) => {
     e.preventDefault();
@@ -1119,103 +1044,44 @@ const Payments = () => {
     setSelectedItem(null);
   };
 
+  const handleEdit = (id) => {
+    navigate(`/documents/${id}/edit`);
+    closeContext();
+  };
+
   const clearFilters = () => {
+    setSubjectFilter("All");
     setStatusFilter("All");
-    setDateFilter("All");
+    setTypeFilter("All");
     setSearch("");
   };
 
   // Calculate stats
-  const totalRevenue = filtered.reduce((sum, p) => 
-    p.status === 'Completed' ? sum + p.amount : sum, 0
-  );
-  const totalTransactions = filtered.length;
-  const completedTransactions = filtered.filter(p => p.status === 'Completed').length;
-  const pendingTransactions = filtered.filter(p => p.status === 'Pending').length;
-  const successRate = totalTransactions > 0 
-    ? ((completedTransactions / totalTransactions) * 100).toFixed(1) 
-    : 0;
-
+  //const totalPaid = documents.filter(doc => doc.paid === 'Paid').length;
+  //const totalDownloads = documents.reduce((sum, doc) => sum + (doc.downloads || 0), 0);
+  const totalDocuments = documents.length;
+  const totalPublished = documents.filter(doc => doc.status === 'Published' || doc.status === 'Active').length;
+  const totalPending = documents.filter(doc => doc.status === 'Pending').length;
+  const totalDisabled = documents.filter(doc => doc.status === 'Disabled').length;
+  
   return (
     <>
       <GlobalStyle />
       <PageContainer>
         <MainContent>
           <ContentWrapper>
-            {/* Header with Button Aligned Right */}
+        
             <HeaderSection>
               <TitleSection>
-                <h1>Payment Management</h1>
-                <p>Track and manage all payment transactions</p>
+                <h1>Documents & Notes</h1>
+                <p>Upload and manage study materials</p>
               </TitleSection>
-              <CreateButton onClick={() => navigate("/payments/create")}>
+              <CreateButton onClick={() => navigate("/documents/upload")}>
                 <Plus />
-                Create Invoice
+                Upload Document {/* Upload Button*/}
               </CreateButton>
             </HeaderSection>
 
-            {/* Stats Cards */}
-            <StatsGrid>
-              <StatsCard>
-                <StatsHeader>
-                  <StatsTitle>Total Revenue</StatsTitle>
-                  <StatsIcon bg="#eff6ff" color="#2563eb">
-                    <DollarSign />
-                  </StatsIcon>
-                </StatsHeader>
-                <StatsValue>₹ {totalRevenue.toLocaleString()}</StatsValue>
-                <StatsTrend positive>
-                  <ArrowUpRight />
-                  +8.2%
-                  <span>vs last month</span>
-                </StatsTrend>
-              </StatsCard> 
-
-              <StatsCard>
-                <StatsHeader>
-                  <StatsTitle>Transactions</StatsTitle>
-                  <StatsIcon bg="#ecfdf5" color="#10b981">
-                    <CreditCard />
-                  </StatsIcon>
-                </StatsHeader>
-                <StatsValue>{totalTransactions}</StatsValue>
-                <StatsTrend positive>
-                  <ArrowUpRight />
-                  +15
-                  <span>this week</span>
-                </StatsTrend>
-              </StatsCard>
-
-              <StatsCard>
-                <StatsHeader>
-                  <StatsTitle>Success Rate</StatsTitle>
-                  <StatsIcon bg="#fef3c7" color="#f59e0b">
-                    <CheckCircle />
-                  </StatsIcon>
-                </StatsHeader>
-                <StatsValue>{successRate}%</StatsValue>
-                <StatsTrend positive={successRate >= 70}>
-                  {successRate >= 70 ? <ArrowUpRight /> : <ArrowDownRight />}
-                  {successRate >= 70 ? '+2.5%' : '-1.2%'}
-                  <span>completion</span>
-                </StatsTrend>
-              </StatsCard>
-
-              <StatsCard>
-                <StatsHeader>
-                  <StatsTitle>Pending</StatsTitle>
-                  <StatsIcon bg="#fef2f2" color="#ef4444">
-                    <Clock />
-                  </StatsIcon>
-                </StatsHeader>
-                <StatsValue>{pendingTransactions}</StatsValue>
-                <StatsTrend>
-                  <span>Awaiting processing</span>
-                </StatsTrend>
-              </StatsCard>
-            </StatsGrid>
-
-            {/* Filters Section */}
             <FilterCard>
               <FilterContent>
                 <FilterRow>
@@ -1226,43 +1092,63 @@ const Payments = () => {
                       type="text"
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
-                      placeholder="Search by ID, user, email, or invoice..."
+                      placeholder="Search by title, subject, or type..."
                     />
                   </SearchWrapper>
 
-                  {/* Status Filter */}
+                  {/* Filters Section */}
+
+                  <SelectWrapper>
+                    <Filter />
+                    <StyledSelect 
+                      value={typeFilter} 
+                      onChange={(e) => setTypeFilter(e.target.value)}
+                    >
+                      {/*Type Filter*/}
+                      <option value="All">All Types</option>
+                      <option value="PDF">PDF</option>
+                      <option value="Doc">Document</option>
+                      <option value="PPT">Presentation</option>
+                      <option value="Excel">Spreadsheet</option>
+                      <option value="Image">Image</option>
+                    </StyledSelect>
+                    <ChevronDown />
+                  </SelectWrapper>
+
+                  
+                  <SelectWrapper>
+                    <Filter />
+                    <StyledSelect 
+                      value={subjectFilter} 
+                      onChange={(e) => setSubjectFilter(e.target.value)}
+                    > {/* Subject Filter */}
+                      <option value="All">All Subjects</option>
+                      <option value="DSA">DSA</option>
+                      <option value="OOP">OOP</option>
+                      <option value="DBMS">DBMS</option>
+                      <option value="CN">CN</option>
+                      <option value="OS">OS</option>
+                    </StyledSelect>
+                    <ChevronDown />
+                  </SelectWrapper>
+
+                  
                   <SelectWrapper>
                     <Filter />
                     <StyledSelect 
                       value={statusFilter} 
                       onChange={(e) => setStatusFilter(e.target.value)}
                     >
+                      {/* Status Filter */}
                       <option value="All">All Status</option>
-                      <option value="Completed">Completed</option>
+                      <option value="Active">Active</option>
                       <option value="Pending">Pending</option>
-                      <option value="Processing">Processing</option>
-                      <option value="Failed">Failed</option>
-                      <option value="Refunded">Refunded</option>
+                      <option value="Disabled">Disabled</option>
                     </StyledSelect>
                     <ChevronDown />
                   </SelectWrapper>
 
-                  {/* Date Filter */}
-                  <SelectWrapper>
-                    <Calendar />
-                    <StyledSelect 
-                      value={dateFilter} 
-                      onChange={(e) => setDateFilter(e.target.value)}
-                    >
-                      <option value="All">All Time</option>
-                      <option value="Today">Today</option>
-                      <option value="This Week">This Week</option>
-                      <option value="This Month">This Month</option>
-                    </StyledSelect>
-                    <ChevronDown />
-                  </SelectWrapper>
-
-                  {(statusFilter !== "All" || dateFilter !== "All" || search) && (
+                  {(subjectFilter !== "All" || statusFilter !== "All" || typeFilter !== "All" || search) && (
                     <ClearButton onClick={clearFilters}>
                       <X />
                       Clear
@@ -1274,6 +1160,49 @@ const Payments = () => {
                     Export
                   </ExportButton>
                 </FilterRow>
+
+                {/* Stats Cards */}
+                <StatsGrid>
+                  <StatCard>
+                    <StatIconWrapper bg="#eff6ff" color="#2563eb">
+                      <FileText />
+                    </StatIconWrapper>
+                    <StatInfo>
+                      <StatLabel>Total Documents</StatLabel>
+                      <StatValue>{totalDocuments}</StatValue>
+                    </StatInfo>
+                  </StatCard>
+
+                  <StatCard>
+                    <StatIconWrapper bg="#ecfdf5" color="#10b981">
+                      <CheckCircle />
+                    </StatIconWrapper>
+                    <StatInfo>
+                      <StatLabel>Active Documents</StatLabel>
+                      <StatValue>{totalPublished}</StatValue>
+                    </StatInfo>
+                  </StatCard>
+
+                  <StatCard>
+                    <StatIconWrapper bg="#fef3c7" color="#f5510b">
+                      <X/>
+                    </StatIconWrapper>
+                    <StatInfo>
+                      <StatLabel>Disabled Documents</StatLabel>
+                      <StatValue>{totalDisabled}</StatValue>
+                    </StatInfo>
+                  </StatCard>
+
+                  <StatCard>
+                    <StatIconWrapper bg="#f3e8ff" color="#fc982d">
+                      <Clock/>
+                    </StatIconWrapper>
+                    <StatInfo>
+                      <StatLabel>Pending Documents</StatLabel>
+                      <StatValue>{totalPending.toLocaleString()}</StatValue>
+                    </StatInfo>
+                  </StatCard>
+                </StatsGrid>
               </FilterContent>
             </FilterCard>
 
@@ -1283,97 +1212,91 @@ const Payments = () => {
                 <StyledTable>
                   <TableHead>
                     <tr>
-                      <TableHeaderCell width="15%">Invoice ID</TableHeaderCell>
-                      <TableHeaderCell width="20%">Customer</TableHeaderCell>
-                      <TableHeaderCell width="12%">Amount</TableHeaderCell>
-                      <TableHeaderCell width="12%">Date</TableHeaderCell>
-                      <TableHeaderCell width="12%">Method</TableHeaderCell>
-                      <TableHeaderCell width="12%">Status</TableHeaderCell>
-                      <TableHeaderCell width="17%" style={{ textAlign: 'right' }}>Actions</TableHeaderCell>
+                      <TableHeaderCell width="35%">Document</TableHeaderCell>
+                      <TableHeaderCell width="10%">Type</TableHeaderCell>
+                      <TableHeaderCell width="10%">Semester</TableHeaderCell>
+                      <TableHeaderCell width="12%">Subject</TableHeaderCell>
+                      <TableHeaderCell width="10%">Access</TableHeaderCell>
+                      <TableHeaderCell width="10%">Status</TableHeaderCell>
+                      <TableHeaderCell width="13%" style={{ textAlign: 'right' }}>Actions</TableHeaderCell>
                     </tr>
                   </TableHead>
                   <TableBody>
                     {filtered.length > 0 ? (
-                      filtered.map((payment) => {
-                        const iconColors = getPaymentIcon(payment.id);
+                      filtered.map((doc) => {
+                        const iconColors = getDocumentIconColors(doc.type);
                         return (
                           <TableRow 
-                            key={payment.id}
-                            onContextMenu={(e) => openContext(e, payment)}
+                            key={doc.id}
+                            onContextMenu={(e) => openContext(e, doc)}
                           >
                             <TableCell>
-                              <PaymentInfo>
-                                <PaymentIcon 
+                              <DocumentInfo>
+                                <DocumentIcon 
                                   bg={iconColors.bg} 
                                   color={iconColors.color}
                                   darkBg={iconColors.darkBg}
                                   darkColor={iconColors.darkColor}
                                 >
-                                  <Receipt />
-                                </PaymentIcon>
+                                  {getDocumentIcon(doc.type)}
+                                </DocumentIcon>
                                 <div>
-                                  <PaymentId>{payment.id}</PaymentId>
-                                  <div style={{ 
-                                    fontSize: '0.75rem', 
-                                    color: '#6b7280',
-                                    ...(window.matchMedia('(prefers-color-scheme: dark)').matches && { color: '#9ca3af' })
-                                  }}>
-                                    {payment.invoice}
-                                  </div>
+                                  <DocumentTitle>{doc.title}</DocumentTitle>
+                                  <DocumentMeta>
+                                    <span>{doc.size || '—'}</span>
+                                    <span>•</span>
+                                    <span>{doc.pages || 0} pages</span>
+                                    <span>•</span>
+                                    <span>{doc.downloads || 0} downloads</span>
+                                  </DocumentMeta>
                                 </div>
-                              </PaymentInfo>
+                              </DocumentInfo>
                             </TableCell>
                             <TableCell>
-                              <UserInfo>
-                                <UserName>{payment.user}</UserName>
-                                <UserEmail>
-                                  <Mail />
-                                  {payment.email}
-                                </UserEmail>
-                              </UserInfo>
+                              <TypeBadge type={doc.type}>
+                                {doc.type}
+                              </TypeBadge>
                             </TableCell>
                             <TableCell>
-                              <AmountBadge>
-                                ₹ {payment.amount.toFixed(2)}
-                              </AmountBadge>
-                            </TableCell>
-                            <TableCell>
-                              <div style={{ 
-                                display: 'flex', 
-                                alignItems: 'center', 
-                                gap: '0.5rem',
-                                color: '#6b7280',
-                                ...(window.matchMedia('(prefers-color-scheme: dark)').matches && { color: '#9ca3af' })
-                              }}>
-                                <Calendar style={{ width: '0.875rem', height: '0.875rem' }} />
-                                {formatDate(payment.date)}
-                              </div>
+                              <SemesterBadge>
+                                {doc.semester || '—'}
+                              </SemesterBadge>
                             </TableCell>
                             <TableCell>
                               <span style={{ 
-                                fontSize: '0.875rem',
-                                color: '#4b5563',
-                                ...(window.matchMedia('(prefers-color-scheme: dark)').matches && { color: '#d1d5db' })
+                                fontWeight: 500,
+                                color: '#111827',
+                                ...(window.matchMedia('(prefers-color-scheme: dark)').matches && { color: 'white' })
                               }}>
-                                {payment.method}
+                                {doc.subject}
                               </span>
                             </TableCell>
                             <TableCell>
-                              <StatusBadge status={payment.status}>
-                                {getStatusIcon(payment.status)}
-                                {payment.status}
+                              <PaidBadge paid={doc.paid}>
+                                {/*{doc.paid === "Paid" ? <DollarSign /> : <Zap />}*/}
+                                {doc.paid}
+                              </PaidBadge>
+                            </TableCell>
+                            <TableCell>
+                              <StatusBadge status={doc.status}>
+                                {doc.status === "Published" && <CheckCircle />}
+                                {doc.status === "Active" && <CheckCircle />}
+                                {doc.status === "Draft" && <Eye />}
+                                {doc.status === "Pending" && <Clock />}
+                                {doc.status === "Disabled" && <X />}
+                                {doc.status}
                               </StatusBadge>
                             </TableCell>
                             <TableCell>
                               <ActionGroup>
-                                <ViewButton 
-                                  onClick={() => navigate(`/payments/${payment.id}`)}
-                                  title="View details"
+                                <EditButton 
+                                  onClick={() => handleEdit(doc.id)}
+                                  title="Edit document"
                                 >
-                                  <Eye />
-                                </ViewButton>
+                                  <Edit />
+                                </EditButton>
                                 <ActionButton 
-                                  onClick={(e) => openContext(e, payment)}
+                                  onClick={(e) => openContext(e, doc)}
                                   title="More options"
                                 >
                                   <MoreHorizontal />
@@ -1391,8 +1314,8 @@ const Payments = () => {
                               <IconWrapper>
                                 <AlertCircle />
                               </IconWrapper>
-                              <EmptyTitle>No transactions found</EmptyTitle>
-                              <EmptySubtext>Try adjusting your filters or create a new invoice</EmptySubtext>
+                              <EmptyTitle>No documents found</EmptyTitle>
+                              <EmptySubtext>Try adjusting your filters or upload a new document</EmptySubtext>
                               <ClearFilterButton onClick={clearFilters}>
                                 Clear all filters
                               </ClearFilterButton>
@@ -1409,7 +1332,7 @@ const Payments = () => {
               <TableFooter>
                 <FooterText>
                   Showing <span>{filtered.length}</span> of{" "}
-                  <span>{payments.length}</span> transactions
+                  <span>{documents.length}</span> documents
                 </FooterText>
                 <Pagination>
                   <PageButton>Previous</PageButton>
@@ -1430,30 +1353,35 @@ const Payments = () => {
             <ContextMenuContainer
               style={{ left: contextMenu.x, top: contextMenu.y }}
             >
-              <ContextMenuItem onClick={() => navigate(`/payments/${selectedItem.id}`)}>
-                <Eye />
-                View Details
+              <ContextMenuItem onClick={() => handleEdit(selectedItem.id)}>
+                <Edit />
+                Edit Document
+              </ContextMenuItem>
+              <ContextMenuItem
+                onClick={() => {
+                  navigator.clipboard?.writeText(window.location.origin + `/documents/${selectedItem.id}`);
+                  closeContext();
+                }}
+              >
+                <Link2 />
+                Copy Link
               </ContextMenuItem>
               <ContextMenuItem>
-                <Receipt />
-                View Invoice
+                <Download />
+                Download
               </ContextMenuItem>
               <ContextMenuItem>
-                <Printer />
-                Print Receipt
+                <Copy />
+                Duplicate
               </ContextMenuItem>
               <ContextMenuItem>
-                <Mail />
-                Email Receipt
+                <Archive />
+                Archive
               </ContextMenuItem>
               <ContextMenuDivider />
-              <ContextMenuItem>
-                <RefreshCw />
-                Process Refund
-              </ContextMenuItem>
               <ContextMenuItem danger>
-                <Ban />
-                Cancel Payment
+                <Trash2 />
+                Delete
               </ContextMenuItem>
             </ContextMenuContainer>
           </>
@@ -1463,4 +1391,4 @@ const Payments = () => {
   );
 };
 
-export default Payments;
+export default DocumentsNotes;
