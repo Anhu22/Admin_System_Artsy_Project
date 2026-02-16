@@ -1,7 +1,190 @@
 import React, { useState } from 'react';
+import styled from 'styled-components';
+import { Plus, X, Edit, Trash2 } from 'lucide-react';
 import SettingsLayout, { Tab } from '../components/Settings/SettingsLayout';
 import SettingsForm, { FormField } from '../components/Settings/SettingsForm';
 import SettingsTable, { TableColumn } from '../components/Settings/SettingsTable';
+
+// Status Badge Component
+const StatusBadge = styled.span<{ $active: boolean }>`
+	display: inline-flex;
+	align-items: center;
+	padding: 0.25rem 0.75rem;
+	border-radius: 9999px;
+	font-size: 0.75rem;
+	font-weight: 500;
+	line-height: 1.5;
+	
+	${props => props.$active ? `
+		background-color: #d1fae5;
+		color: #065f46;
+		border: 1px solid #a7f3d0;
+	` : `
+		background-color: #fee2e2;
+		color: #991b1b;
+		border: 1px solid #fecaca;
+	`}
+
+	@media (prefers-color-scheme: dark) {
+		${props => props.$active ? `
+			background-color: rgba(16, 185, 129, 0.2);
+			color: #86efac;
+			border-color: rgba(16, 185, 129, 0.3);
+		` : `
+			background-color: rgba(220, 38, 38, 0.2);
+			color: #fca5a5;
+			border-color: rgba(220, 38, 38, 0.3);
+		`}
+	}
+`;
+
+// Approval Badge Component
+const ApprovalBadge = styled.span<{ $required: boolean }>`
+	display: inline-flex;
+	align-items: center;
+	padding: 0.25rem 0.75rem;
+	border-radius: 9999px;
+	font-size: 0.75rem;
+	font-weight: 500;
+	line-height: 1.5;
+	
+	${props => props.$required ? `
+		background-color: #fef3c7;
+		color: #92400e;
+		border: 1px solid #fde68a;
+	` : `
+		background-color: #d1fae5;
+		color: #065f46;
+		border: 1px solid #a7f3d0;
+	`}
+
+	@media (prefers-color-scheme: dark) {
+		${props => props.$required ? `
+			background-color: rgba(245, 158, 11, 0.2);
+			color: #fcd34d;
+			border-color: rgba(245, 158, 11, 0.3);
+		` : `
+			background-color: rgba(16, 185, 129, 0.2);
+			color: #86efac;
+			border-color: rgba(16, 185, 129, 0.3);
+		`}
+	}
+`;
+
+// Modal Styles (shared)
+const ModalOverlay = styled.div<{ $isOpen: boolean }>`
+	display: ${props => (props.$isOpen ? 'flex' : 'none')};
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+`;
+
+const ModalContent = styled.div`
+	background-color: white;
+	border-radius: 8px;
+	padding: 1.5rem;
+	max-width: 680px;
+	width: 94%;
+	max-height: 90vh;
+	overflow-y: auto;
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+
+	@media (prefers-color-scheme: dark) {
+		background-color: #1f2937;
+	}
+`;
+
+const ModalHeader = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1rem;
+	border-bottom: 1px solid #e5e7eb;
+	padding-bottom: 0.75rem;
+
+	h2 {
+		margin: 0;
+		font-size: 1.25rem;
+		color: #111827;
+
+		@media (prefers-color-scheme: dark) {
+			color: white;
+		}
+	}
+
+	@media (prefers-color-scheme: dark) {
+		border-bottom-color: #374151;
+	}
+`;
+
+const CloseButton = styled.button`
+	background: none;
+	border: none;
+	font-size: 1.25rem;
+	cursor: pointer;
+	color: #6b7280;
+	padding: 0;
+	width: 2rem;
+	height: 2rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 0.375rem;
+	transition: all 0.2s;
+
+	&:hover {
+		color: #111827;
+		background-color: #f3f4f6;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		color: #9ca3af;
+
+		&:hover {
+			color: white;
+			background-color: #374151;
+		}
+	}
+`;
+
+const CreateButton = styled.button`
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.5rem 1rem;
+	background-color: #2563eb;
+	color: white;
+	border: none;
+	border-radius: 0.5rem;
+	font-size: 0.875rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition: background-color 0.2s;
+	margin-bottom: 1.5rem;
+
+	&:hover {
+		background-color: #1d4ed8;
+	}
+
+	svg {
+		width: 1rem;
+		height: 1rem;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		background-color: #3b82f6;
+
+		&:hover {
+			background-color: #2563eb;
+		}
+	}
+`;
 
 // Subscription Based Rules Tab
 const SubscriptionBasedRulesTab = () => {
@@ -23,6 +206,7 @@ const SubscriptionBasedRulesTab = () => {
 	]);
 
 	const [editingRule, setEditingRule] = useState<any>(null);
+	const [showForm, setShowForm] = useState(false);
 
 	const fields: FormField[] = [
 		{
@@ -60,11 +244,7 @@ const SubscriptionBasedRulesTab = () => {
 		{
 			key: 'active',
 			label: 'Status',
-			render: (value) => (
-				<span className={`badge ${value ? 'bg-success' : 'bg-secondary'}`}>
-					{value ? 'Active' : 'Inactive'}
-				</span>
-			),
+			render: (value) => <StatusBadge $active={value}>{value ? 'Active' : 'Inactive'}</StatusBadge>,
 		},
 	];
 
@@ -87,6 +267,12 @@ const SubscriptionBasedRulesTab = () => {
 				},
 			]);
 		}
+		setShowForm(false);
+	};
+
+	const handleCloseModal = () => {
+		setShowForm(false);
+		setEditingRule(null);
 	};
 
 	const handleDelete = (row: any) => {
@@ -94,26 +280,42 @@ const SubscriptionBasedRulesTab = () => {
 	};
 
 	return (
-		<div className="p-4">
-			<SettingsForm
-				fields={fields}
-				title={editingRule ? 'Edit Rule' : 'Create New Subscription Rule'}
-				submitLabel={editingRule ? 'Update' : 'Create'}
-				onSubmit={handleSubmit}
-				initialData={
-					editingRule || {
-						subscriptionType: '',
-						dailyPoints: '',
-						monthlyBonus: '',
-						active: true,
-					}
-				}
-			/>
+		<div style={{ padding: '1.5rem' }}>
+			<CreateButton onClick={() => setShowForm(true)}>
+				<Plus size={16} />
+				Create New Rule
+			</CreateButton>
+
+			<ModalOverlay $isOpen={showForm}>
+				<ModalContent>
+					<ModalHeader>
+						<h2>{editingRule ? 'Edit Rule' : 'Create New Subscription Rule'}</h2>
+						<CloseButton onClick={handleCloseModal}>
+							<X size={20} />
+						</CloseButton>
+					</ModalHeader>
+					<SettingsForm
+						fields={fields}
+						title=""
+						submitLabel={editingRule ? 'Update' : 'Create'}
+						onSubmit={handleSubmit}
+						initialData={
+							editingRule || {
+								subscriptionType: '',
+								dailyPoints: '',
+								monthlyBonus: '',
+								active: true,
+							}
+						}
+					/>
+				</ModalContent>
+			</ModalOverlay>
+
 			<SettingsTable
 				columns={columns}
 				data={rules}
 				title="Subscription Based Rules"
-				onEdit={(row) => setEditingRule(row)}
+				onEdit={(row) => { setEditingRule(row); setShowForm(true); }}
 				onDelete={handleDelete}
 				searchFields={['subscriptionType']}
 			/>
@@ -141,6 +343,7 @@ const ResetRulesTab = () => {
 	]);
 
 	const [editingRule, setEditingRule] = useState<any>(null);
+	const [showForm, setShowForm] = useState(false);
 
 	const fields: FormField[] = [
 		{
@@ -178,11 +381,7 @@ const ResetRulesTab = () => {
 		{
 			key: 'active',
 			label: 'Status',
-			render: (value) => (
-				<span className={`badge ${value ? 'bg-success' : 'bg-secondary'}`}>
-					{value ? 'Active' : 'Inactive'}
-				</span>
-			),
+			render: (value) => <StatusBadge $active={value}>{value ? 'Active' : 'Inactive'}</StatusBadge>,
 		},
 	];
 
@@ -205,6 +404,12 @@ const ResetRulesTab = () => {
 				},
 			]);
 		}
+		setShowForm(false);
+	};
+
+	const handleCloseModal = () => {
+		setShowForm(false);
+		setEditingRule(null);
 	};
 
 	const handleDelete = (row: any) => {
@@ -212,26 +417,42 @@ const ResetRulesTab = () => {
 	};
 
 	return (
-		<div className="p-4">
-			<SettingsForm
-				fields={fields}
-				title={editingRule ? 'Edit Reset Rule' : 'Create New Reset Rule'}
-				submitLabel={editingRule ? 'Update' : 'Create'}
-				onSubmit={handleSubmit}
-				initialData={
-					editingRule || {
-						ruleName: '',
-						resetDay: '',
-						maxPointsBefore: '',
-						active: true,
-					}
-				}
-			/>
+		<div style={{ padding: '1.5rem' }}>
+			<CreateButton onClick={() => setShowForm(true)}>
+				<Plus size={16} />
+				Create New Reset Rule
+			</CreateButton>
+
+			<ModalOverlay $isOpen={showForm}>
+				<ModalContent>
+					<ModalHeader>
+						<h2>{editingRule ? 'Edit Reset Rule' : 'Create New Reset Rule'}</h2>
+						<CloseButton onClick={handleCloseModal}>
+							<X size={20} />
+						</CloseButton>
+					</ModalHeader>
+					<SettingsForm
+						fields={fields}
+						title=""
+						submitLabel={editingRule ? 'Update' : 'Create'}
+						onSubmit={handleSubmit}
+						initialData={
+							editingRule || {
+								ruleName: '',
+								resetDay: '',
+								maxPointsBefore: '',
+								active: true,
+							}
+						}
+					/>
+				</ModalContent>
+			</ModalOverlay>
+
 			<SettingsTable
 				columns={columns}
 				data={rules}
 				title="Reset Rules"
-				onEdit={(row) => setEditingRule(row)}
+				onEdit={(row) => { setEditingRule(row); setShowForm(true); }}
 				onDelete={handleDelete}
 				searchFields={['ruleName']}
 			/>
@@ -266,6 +487,7 @@ const DailyUsagePointsTab = () => {
 	]);
 
 	const [editingRule, setEditingRule] = useState<any>(null);
+	const [showForm, setShowForm] = useState(false);
 
 	const fields: FormField[] = [
 		{
@@ -303,11 +525,7 @@ const DailyUsagePointsTab = () => {
 		{
 			key: 'active',
 			label: 'Status',
-			render: (value) => (
-				<span className={`badge ${value ? 'bg-success' : 'bg-secondary'}`}>
-					{value ? 'Active' : 'Inactive'}
-				</span>
-			),
+			render: (value) => <StatusBadge $active={value}>{value ? 'Active' : 'Inactive'}</StatusBadge>,
 		},
 	];
 
@@ -330,6 +548,12 @@ const DailyUsagePointsTab = () => {
 				},
 			]);
 		}
+		setShowForm(false);
+	};
+
+	const handleCloseModal = () => {
+		setShowForm(false);
+		setEditingRule(null);
 	};
 
 	const handleDelete = (row: any) => {
@@ -337,26 +561,42 @@ const DailyUsagePointsTab = () => {
 	};
 
 	return (
-		<div className="p-4">
-			<SettingsForm
-				fields={fields}
-				title={editingRule ? 'Edit Daily Usage Rule' : 'Create New Daily Usage Rule'}
-				submitLabel={editingRule ? 'Update' : 'Create'}
-				onSubmit={handleSubmit}
-				initialData={
-					editingRule || {
-						action: '',
-						points: '',
-						maxDaily: '',
-						active: true,
-					}
-				}
-			/>
+		<div style={{ padding: '1.5rem' }}>
+			<CreateButton onClick={() => setShowForm(true)}>
+				<Plus size={16} />
+				Create New Daily Usage Rule
+			</CreateButton>
+
+			<ModalOverlay $isOpen={showForm}>
+				<ModalContent>
+					<ModalHeader>
+						<h2>{editingRule ? 'Edit Daily Usage Rule' : 'Create New Daily Usage Rule'}</h2>
+						<CloseButton onClick={handleCloseModal}>
+							<X size={20} />
+						</CloseButton>
+					</ModalHeader>
+					<SettingsForm
+						fields={fields}
+						title=""
+						submitLabel={editingRule ? 'Update' : 'Create'}
+						onSubmit={handleSubmit}
+						initialData={
+							editingRule || {
+								action: '',
+								points: '',
+								maxDaily: '',
+								active: true,
+							}
+						}
+					/>
+				</ModalContent>
+			</ModalOverlay>
+
 			<SettingsTable
 				columns={columns}
 				data={rules}
 				title="Daily Usage Points"
-				onEdit={(row) => setEditingRule(row)}
+				onEdit={(row) => { setEditingRule(row); setShowForm(true); }}
 				onDelete={handleDelete}
 				searchFields={['action']}
 			/>
@@ -391,6 +631,7 @@ const PointsPerApprovedQuestionsTab = () => {
 	]);
 
 	const [editingRule, setEditingRule] = useState<any>(null);
+	const [showForm, setShowForm] = useState(false);
 
 	const fields: FormField[] = [
 		{
@@ -429,20 +670,12 @@ const PointsPerApprovedQuestionsTab = () => {
 		{
 			key: 'approvalRequired',
 			label: 'Approval Required',
-			render: (value) => (
-				<span className={`badge ${value ? 'bg-warning' : 'bg-success'}`}>
-					{value ? 'Yes' : 'No'}
-				</span>
-			),
+			render: (value) => <ApprovalBadge $required={value}>{value ? 'Yes' : 'No'}</ApprovalBadge>,
 		},
 		{
 			key: 'active',
 			label: 'Status',
-			render: (value) => (
-				<span className={`badge ${value ? 'bg-success' : 'bg-secondary'}`}>
-					{value ? 'Active' : 'Inactive'}
-				</span>
-			),
+			render: (value) => <StatusBadge $active={value}>{value ? 'Active' : 'Inactive'}</StatusBadge>,
 		},
 	];
 
@@ -464,6 +697,12 @@ const PointsPerApprovedQuestionsTab = () => {
 				},
 			]);
 		}
+		setShowForm(false);
+	};
+
+	const handleCloseModal = () => {
+		setShowForm(false);
+		setEditingRule(null);
 	};
 
 	const handleDelete = (row: any) => {
@@ -471,26 +710,42 @@ const PointsPerApprovedQuestionsTab = () => {
 	};
 
 	return (
-		<div className="p-4">
-			<SettingsForm
-				fields={fields}
-				title={editingRule ? 'Edit Question Points' : 'Create New Question Points Rule'}
-				submitLabel={editingRule ? 'Update' : 'Create'}
-				onSubmit={handleSubmit}
-				initialData={
-					editingRule || {
-						difficultyLevel: '',
-						points: '',
-						approvalRequired: false,
-						active: true,
-					}
-				}
-			/>
+		<div style={{ padding: '1.5rem' }}>
+			<CreateButton onClick={() => setShowForm(true)}>
+				<Plus size={16} />
+				Create New Question Points Rule
+			</CreateButton>
+
+			<ModalOverlay $isOpen={showForm}>
+				<ModalContent>
+					<ModalHeader>
+						<h2>{editingRule ? 'Edit Question Points' : 'Create New Question Points Rule'}</h2>
+						<CloseButton onClick={handleCloseModal}>
+							<X size={20} />
+						</CloseButton>
+					</ModalHeader>
+					<SettingsForm
+						fields={fields}
+						title=""
+						submitLabel={editingRule ? 'Update' : 'Create'}
+						onSubmit={handleSubmit}
+						initialData={
+							editingRule || {
+								difficultyLevel: '',
+								points: '',
+								approvalRequired: false,
+								active: true,
+							}
+						}
+					/>
+				</ModalContent>
+			</ModalOverlay>
+
 			<SettingsTable
 				columns={columns}
 				data={rules}
 				title="Points Per Approved Questions"
-				onEdit={(row) => setEditingRule(row)}
+				onEdit={(row) => { setEditingRule(row); setShowForm(true); }}
 				onDelete={handleDelete}
 				searchFields={['difficultyLevel']}
 			/>
@@ -525,6 +780,7 @@ const PointsPerQuestionUploadTab = () => {
 	]);
 
 	const [editingRule, setEditingRule] = useState<any>(null);
+	const [showForm, setShowForm] = useState(false);
 
 	const fields: FormField[] = [
 		{
@@ -562,11 +818,7 @@ const PointsPerQuestionUploadTab = () => {
 		{
 			key: 'active',
 			label: 'Status',
-			render: (value) => (
-				<span className={`badge ${value ? 'bg-success' : 'bg-secondary'}`}>
-					{value ? 'Active' : 'Inactive'}
-				</span>
-			),
+			render: (value) => <StatusBadge $active={value}>{value ? 'Active' : 'Inactive'}</StatusBadge>,
 		},
 	];
 
@@ -589,6 +841,12 @@ const PointsPerQuestionUploadTab = () => {
 				},
 			]);
 		}
+		setShowForm(false);
+	};
+
+	const handleCloseModal = () => {
+		setShowForm(false);
+		setEditingRule(null);
 	};
 
 	const handleDelete = (row: any) => {
@@ -596,26 +854,42 @@ const PointsPerQuestionUploadTab = () => {
 	};
 
 	return (
-		<div className="p-4">
-			<SettingsForm
-				fields={fields}
-				title={editingRule ? 'Edit Upload Points' : 'Create New Upload Points Rule'}
-				submitLabel={editingRule ? 'Update' : 'Create'}
-				onSubmit={handleSubmit}
-				initialData={
-					editingRule || {
-						uploadType: '',
-						points: '',
-						maxPerDay: '',
-						active: true,
-					}
-				}
-			/>
+		<div style={{ padding: '1.5rem' }}>
+			<CreateButton onClick={() => setShowForm(true)}>
+				<Plus size={16} />
+				Create New Upload Points Rule
+			</CreateButton>
+
+			<ModalOverlay $isOpen={showForm}>
+				<ModalContent>
+					<ModalHeader>
+						<h2>{editingRule ? 'Edit Upload Points' : 'Create New Upload Points Rule'}</h2>
+						<CloseButton onClick={handleCloseModal}>
+							<X size={20} />
+						</CloseButton>
+					</ModalHeader>
+					<SettingsForm
+						fields={fields}
+						title=""
+						submitLabel={editingRule ? 'Update' : 'Create'}
+						onSubmit={handleSubmit}
+						initialData={
+							editingRule || {
+								uploadType: '',
+								points: '',
+								maxPerDay: '',
+								active: true,
+							}
+						}
+					/>
+				</ModalContent>
+			</ModalOverlay>
+
 			<SettingsTable
 				columns={columns}
 				data={rules}
 				title="Points Per Question Upload"
-				onEdit={(row) => setEditingRule(row)}
+				onEdit={(row) => { setEditingRule(row); setShowForm(true); }}
 				onDelete={handleDelete}
 				searchFields={['uploadType']}
 			/>
@@ -653,6 +927,7 @@ const PointsPerTestTab = () => {
 	]);
 
 	const [editingRule, setEditingRule] = useState<any>(null);
+	const [showForm, setShowForm] = useState(false);
 
 	const fields: FormField[] = [
 		{
@@ -698,11 +973,7 @@ const PointsPerTestTab = () => {
 		{
 			key: 'active',
 			label: 'Status',
-			render: (value) => (
-				<span className={`badge ${value ? 'bg-success' : 'bg-secondary'}`}>
-					{value ? 'Active' : 'Inactive'}
-				</span>
-			),
+			render: (value) => <StatusBadge $active={value}>{value ? 'Active' : 'Inactive'}</StatusBadge>,
 		},
 	];
 
@@ -726,6 +997,12 @@ const PointsPerTestTab = () => {
 				},
 			]);
 		}
+		setShowForm(false);
+	};
+
+	const handleCloseModal = () => {
+		setShowForm(false);
+		setEditingRule(null);
 	};
 
 	const handleDelete = (row: any) => {
@@ -733,27 +1010,43 @@ const PointsPerTestTab = () => {
 	};
 
 	return (
-		<div className="p-4">
-			<SettingsForm
-				fields={fields}
-				title={editingRule ? 'Edit Test Points' : 'Create New Test Points Rule'}
-				submitLabel={editingRule ? 'Update' : 'Create'}
-				onSubmit={handleSubmit}
-				initialData={
-					editingRule || {
-						testType: '',
-						pointsPerCorrect: '',
-						pointsPerIncorrect: '',
-						maxPointsPerTest: '',
-						active: true,
-					}
-				}
-			/>
+		<div style={{ padding: '1.5rem' }}>
+			<CreateButton onClick={() => setShowForm(true)}>
+				<Plus size={16} />
+				Create New Test Points Rule
+			</CreateButton>
+
+			<ModalOverlay $isOpen={showForm}>
+				<ModalContent>
+					<ModalHeader>
+						<h2>{editingRule ? 'Edit Test Points' : 'Create New Test Points Rule'}</h2>
+						<CloseButton onClick={handleCloseModal}>
+							<X size={20} />
+						</CloseButton>
+					</ModalHeader>
+					<SettingsForm
+						fields={fields}
+						title=""
+						submitLabel={editingRule ? 'Update' : 'Create'}
+						onSubmit={handleSubmit}
+						initialData={
+							editingRule || {
+								testType: '',
+								pointsPerCorrect: '',
+								pointsPerIncorrect: '',
+								maxPointsPerTest: '',
+								active: true,
+							}
+						}
+					/>
+				</ModalContent>
+			</ModalOverlay>
+
 			<SettingsTable
 				columns={columns}
 				data={rules}
 				title="Points Per Test"
-				onEdit={(row) => setEditingRule(row)}
+				onEdit={(row) => { setEditingRule(row); setShowForm(true); }}
 				onDelete={handleDelete}
 				searchFields={['testType']}
 			/>
@@ -761,44 +1054,43 @@ const PointsPerTestTab = () => {
 	);
 };
 
-// Role-Based Access Control Tab
 // Main Page
 const PointSettings: React.FC = () => {
 	const tabs: Tab[] = [
 		{
 			id: 'subscription',
-			label: '📋 Subscription Based Rules',
-			icon: '📋',
+			label: 'Subscription Based Points',
+			icon: '',
 			content: <SubscriptionBasedRulesTab />,
 		},
 		{
 			id: 'reset',
-			label: '🔄 Reset Rules',
-			icon: '🔄',
+			label: 'Reset Rules',
+			icon: '',
 			content: <ResetRulesTab />,
 		},
 		{
 			id: 'daily',
-			label: '📅 Daily Usage Points',
-			icon: '📅',
+			label: 'Daily Points',
+			icon: '',
 			content: <DailyUsagePointsTab />,
 		},
 		{
 			id: 'approved-questions',
-			label: '✅ Points Per Approved Questions',
-			icon: '✅',
+			label: 'Per Approved Questions',
+			icon: '',
 			content: <PointsPerApprovedQuestionsTab />,
 		},
 		{
 			id: 'question-upload',
-			label: '⬆️ Points Per Question Upload',
-			icon: '⬆️',
+			label: 'Points Per Upload',
+			icon: '',
 			content: <PointsPerQuestionUploadTab />,
 		},
 		{
 			id: 'test',
-			label: '📝 Points Per Test',
-			icon: '📝',
+			label: 'Points Per Test',
+			icon: '',
 			content: <PointsPerTestTab />,
 		},
 	];
@@ -807,7 +1099,7 @@ const PointSettings: React.FC = () => {
 		<SettingsLayout
 			pageTitle="Point System"
 			pageDescription="Configure all point earning rules and system"
-			pageIcon="⭐"
+			pageIcon=""
 			tabs={tabs}
 			viewMode="tabs"
 		/>

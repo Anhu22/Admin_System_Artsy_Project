@@ -150,6 +150,10 @@ import ModulesTests from "../pages/ModulesTests";
 import ScrollToTop from "../element/scrolltotop";
 import EditProfile from "../pages/apps/edit-profile";
 import Documents from "../pages/Documents";
+import AuditLogs from "../../pages/Audit-Logs";
+import QuestionBank from "../pages/QuestionBank";
+import StudentQuestions from "../pages/StudentSubmitted";
+import SubscriptionPlans from "../pages/Subscription";
 
 const Markup = () => {
     return (
@@ -170,6 +174,10 @@ const Markup = () => {
                     <Route path='/system-settings' element={<SystemSettings />} />
                     <Route path='/modules-tests' element={<ModulesTests />} />
                     <Route path='/documents' element={<Documents />} />
+                    <Route path='/audit-logs' element={<AuditLogs />} />
+                    <Route path='/question-bank' element={<QuestionBank />} />
+                    <Route path='/student-submitted' element={<StudentQuestions />} />
+                    <Route path='/subscription' element={<SubscriptionPlans />} />
                 </Route>
                 {/* <Route path='page-lock-screen' element={<LockScreen />} />
                 <Route path='page-error-400' element={<Error400 />} />

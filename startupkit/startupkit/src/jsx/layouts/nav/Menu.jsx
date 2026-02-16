@@ -112,21 +112,22 @@ export const MenuList = [
         ],
     },
     { title: 'Calender', iconStyle: <i className="flaticon-calendar-2" />, to: 'calendar' },*/
-    { title: 'Configure', classsChange: 'menu-title', },
+    { title: 'Configuration', classsChange: 'menu-title', },
+    
     {
-        title: 'System Setting', to: 'system-settings', iconStyle: <i className="flaticon flaticon-cms" />,
+        title: 'Academic Setting', to: 'academic-settings', iconStyle: <i className="flaticon-blog" />,
+    },
+    {
+        title: 'Subscription', to: 'subscription', iconStyle: <i className="flaticon-app" />,
     },
     {
         title: 'Points Rules', to: 'point-settings', iconStyle: <i className="flaticon-bar-chart" />,
     },
     {
-        title: 'Academic Setting', to: 'academic-settings', iconStyle: <i className="flaticon-blog" />,
-    },
-    {
         title: 'Test Setting', to: 'test-settings', iconStyle: <i className="flaticon-puzzle" />,
     },
     {
-        title: 'Subscription', to: 'subscription', iconStyle: <i className="flaticon-app" />,
+        title: 'System Setting', to: 'system-settings', iconStyle: <i className="flaticon flaticon-cms" />,
     }
     /*{ title: 'Widget', iconStyle: <i className="flaticon-web" />, to: 'widget-basic', },
     {

@@ -1,7 +1,161 @@
 import React, { useState } from 'react';
+import styled from 'styled-components';
+import { Plus, X, Edit, Trash2 } from 'lucide-react';
 import SettingsLayout, { Tab } from '../components/Settings/SettingsLayout';
 import SettingsForm, { FormField } from '../components/Settings/SettingsForm';
 import SettingsTable, { TableColumn } from '../components/Settings/SettingsTable';
+
+// Status Badge Component
+const StatusBadge = styled.span<{ $active: boolean }>`
+	display: inline-flex;
+	align-items: center;
+	padding: 0.25rem 0.75rem;
+	border-radius: 9999px;
+	font-size: 0.75rem;
+	font-weight: 500;
+	line-height: 1.5;
+	
+	${props => props.$active ? `
+		background-color: #d1fae5;
+		color: #065f46;
+		border: 1px solid #a7f3d0;
+	` : `
+		background-color: #fee2e2;
+		color: #991b1b;
+		border: 1px solid #fecaca;
+	`}
+
+	@media (prefers-color-scheme: dark) {
+		${props => props.$active ? `
+			background-color: rgba(16, 185, 129, 0.2);
+			color: #86efac;
+			border-color: rgba(16, 185, 129, 0.3);
+		` : `
+			background-color: rgba(220, 38, 38, 0.2);
+			color: #fca5a5;
+			border-color: rgba(220, 38, 38, 0.3);
+		`}
+	}
+`;
+
+// Shared modal styles
+const ModalOverlay = styled.div<{ $isOpen: boolean }>`
+	display: ${props => (props.$isOpen ? 'flex' : 'none')};
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+`;
+
+const ModalContent = styled.div`
+	background-color: white;
+	border-radius: 0.75rem;
+	padding: 1.5rem;
+	max-width: 680px;
+	width: 94%;
+	max-height: 90vh;
+	overflow-y: auto;
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+
+	@media (prefers-color-scheme: dark) {
+		background-color: #1f2937;
+	}
+`;
+
+const ModalHeader = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1rem;
+	border-bottom: 1px solid #e5e7eb;
+	padding-bottom: 0.75rem;
+
+	h2 {
+		margin: 0;
+		font-size: 1.25rem;
+		color: #111827;
+
+		@media (prefers-color-scheme: dark) {
+			color: white;
+		}
+	}
+
+	@media (prefers-color-scheme: dark) {
+		border-bottom-color: #374151;
+	}
+`;
+
+const CloseButton = styled.button`
+	background: none;
+	border: none;
+	cursor: pointer;
+	color: #6b7280;
+	padding: 0;
+	width: 2rem;
+	height: 2rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 0.375rem;
+	transition: all 0.2s;
+
+	&:hover {
+		color: #111827;
+		background-color: #f3f4f6;
+	}
+
+	svg {
+		width: 1.25rem;
+		height: 1.25rem;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		color: #9ca3af;
+
+		&:hover {
+			color: white;
+			background-color: #374151;
+		}
+	}
+`;
+
+const CreateButton = styled.button`
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.5rem 1rem;
+	background-color: #2563eb;
+	color: white;
+	border: none;
+	border-radius: 0.5rem;
+	font-size: 0.875rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition: background-color 0.2s;
+	margin-bottom: 1.5rem;
+
+	&:hover {
+		background-color: #1d4ed8;
+	}
+
+	svg {
+		width: 1rem;
+		height: 1rem;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		background-color: #3b82f6;
+
+		&:hover {
+			background-color: #2563eb;
+		}
+	}
+`;
 
 // Test Configuration Tab
 const TestConfigTab = () => {
@@ -27,6 +181,7 @@ const TestConfigTab = () => {
 	]);
 
 	const [editingTest, setEditingTest] = useState<any>(null);
+	const [showForm, setShowForm] = useState(false);
 
 	const testFields: FormField[] = [
 		{
@@ -84,11 +239,7 @@ const TestConfigTab = () => {
 		{
 			key: 'active',
 			label: 'Status',
-			render: (value) => (
-				<span className={`badge ${value ? 'bg-success' : 'bg-secondary'}`}>
-					{value ? 'Active' : 'Inactive'}
-				</span>
-			),
+			render: (value) => <StatusBadge $active={value}>{value ? 'Active' : 'Inactive'}</StatusBadge>,
 		},
 	];
 
@@ -112,6 +263,12 @@ const TestConfigTab = () => {
 				},
 			]);
 		}
+		setShowForm(false);
+	};
+
+	const handleCloseModal = () => {
+		setShowForm(false);
+		setEditingTest(null);
 	};
 
 	const handleTestDelete = (row: any) => {
@@ -119,28 +276,44 @@ const TestConfigTab = () => {
 	};
 
 	return (
-		<div className="p-4">
-			<SettingsForm
-				fields={testFields}
-				title={editingTest ? 'Edit Test' : 'Create New Test'}
-				submitLabel={editingTest ? 'Update' : 'Create'}
-				onSubmit={handleTestSubmit}
-				initialData={
-					editingTest || {
-						name: '',
-						subject: '',
-						duration: '',
-						totalMarks: '',
-						passingMarks: '',
-						active: true,
-					}
-				}
-			/>
+		<div style={{ padding: '1.5rem' }}>
+			<CreateButton onClick={() => setShowForm(true)}>
+				<Plus size={16} />
+				Create New Test
+			</CreateButton>
+
+			<ModalOverlay $isOpen={showForm}>
+				<ModalContent>
+					<ModalHeader>
+						<h2>{editingTest ? 'Edit Test' : 'Create New Test'}</h2>
+						<CloseButton onClick={handleCloseModal}>
+							<X size={20} />
+						</CloseButton>
+					</ModalHeader>
+					<SettingsForm
+						fields={testFields}
+						title=""
+						submitLabel={editingTest ? 'Update' : 'Create'}
+						onSubmit={handleTestSubmit}
+						initialData={
+							editingTest || {
+								name: '',
+								subject: '',
+								duration: '',
+								totalMarks: '',
+								passingMarks: '',
+								active: true,
+							}
+						}
+					/>
+				</ModalContent>
+			</ModalOverlay>
+
 			<SettingsTable
 				columns={testColumns}
 				data={tests}
 				title="Test Configuration List"
-				onEdit={(row) => setEditingTest(row)}
+				onEdit={(row) => { setEditingTest(row); setShowForm(true); }}
 				onDelete={handleTestDelete}
 				searchFields={['name', 'subject']}
 			/>
@@ -172,6 +345,7 @@ const TestCategoriesTab = () => {
 	]);
 
 	const [editingCategory, setEditingCategory] = useState<any>(null);
+	const [showForm, setShowForm] = useState(false);
 
 	const categoryFields: FormField[] = [
 		{
@@ -220,6 +394,12 @@ const TestCategoriesTab = () => {
 				},
 			]);
 		}
+		setShowForm(false);
+	};
+
+	const handleCloseModal = () => {
+		setShowForm(false);
+		setEditingCategory(null);
 	};
 
 	const handleCategoryDelete = (row: any) => {
@@ -227,25 +407,41 @@ const TestCategoriesTab = () => {
 	};
 
 	return (
-		<div className="p-4">
-			<SettingsForm
-				fields={categoryFields}
-				title={editingCategory ? 'Edit Category' : 'Create New Category'}
-				submitLabel={editingCategory ? 'Update' : 'Create'}
-				onSubmit={handleCategorySubmit}
-				initialData={
-					editingCategory || {
-						name: '',
-						description: '',
-						weight: '',
-					}
-				}
-			/>
+		<div style={{ padding: '1.5rem' }}>
+			<CreateButton onClick={() => setShowForm(true)}>
+				<Plus size={16} />
+				Create New Category
+			</CreateButton>
+
+			<ModalOverlay $isOpen={showForm}>
+				<ModalContent>
+					<ModalHeader>
+						<h2>{editingCategory ? 'Edit Category' : 'Create New Category'}</h2>
+						<CloseButton onClick={handleCloseModal}>
+							<X size={20} />
+						</CloseButton>
+					</ModalHeader>
+					<SettingsForm
+						fields={categoryFields}
+						title=""
+						submitLabel={editingCategory ? 'Update' : 'Create'}
+						onSubmit={handleCategorySubmit}
+						initialData={
+							editingCategory || {
+								name: '',
+								description: '',
+								weight: '',
+							}
+						}
+					/>
+				</ModalContent>
+			</ModalOverlay>
+
 			<SettingsTable
 				columns={categoryColumns}
 				data={categories}
 				title="Test Category List"
-				onEdit={(row) => setEditingCategory(row)}
+				onEdit={(row) => { setEditingCategory(row); setShowForm(true); }}
 				onDelete={handleCategoryDelete}
 				searchFields={['name']}
 			/>
@@ -258,14 +454,14 @@ const TestSettings: React.FC = () => {
 	const tabs: Tab[] = [
 		{
 			id: 'config',
-			label: '⚙️ Test Configuration',
-			icon: '⚙️',
+			label: 'Test Configuration',
+			icon: '',
 			content: <TestConfigTab />,
 		},
 		{
 			id: 'categories',
-			label: '📂 Test Categories',
-			icon: '📂',
+			label: 'Test Categories',
+			icon: '',
 			content: <TestCategoriesTab />,
 		},
 	];
@@ -274,7 +470,7 @@ const TestSettings: React.FC = () => {
 		<SettingsLayout
 			pageTitle="Test Settings"
 			pageDescription="Configure and manage test configurations and categories"
-			pageIcon="📝"
+			pageIcon=""
 			tabs={tabs}
 			viewMode="tabs"
 		/>

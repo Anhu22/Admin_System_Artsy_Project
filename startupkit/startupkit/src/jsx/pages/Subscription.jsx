@@ -1,0 +1,886 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import {
+  Download,
+  FileText,
+  HelpCircle,
+  Award,
+  Zap,
+  Star,
+  Crown,
+  Edit,
+  Plus,
+  Search,
+  Filter,
+  ChevronDown,
+  X,
+  Download as DownloadIcon,
+  Users,
+  DollarSign,
+  TrendingUp
+} from 'lucide-react';
+
+// Styled Components
+const ContentWrapper = styled.div`
+  padding: 2rem;
+  background-color: #f9fafb;
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #111827;
+  }
+`;
+
+const HeaderSection = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+`;
+
+const TitleSection = styled.div`
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 0.25rem;
+
+    @media (prefers-color-scheme: dark) {
+      color: white;
+    }
+  }
+
+  p {
+    font-size: 0.875rem;
+    color: #6b7280;
+
+    @media (prefers-color-scheme: dark) {
+      color: #9ca3af;
+    }
+  }
+`;
+
+const ButtonGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+`;
+
+const PrimaryButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  background-color: #2563eb;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+  &:hover {
+    background-color: #1d4ed8;
+  }
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #3b82f6;
+    &:hover {
+      background-color: #2563eb;
+    }
+  }
+`;
+
+const SecondaryButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  background-color: white;
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+  &:hover {
+    background-color: #f9fafb;
+    border-color: #d1d5db;
+  }
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+    color: #6b7280;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #374151;
+    color: #e5e7eb;
+    border-color: #4b5563;
+
+    &:hover {
+      background-color: #4b5563;
+    }
+
+    svg {
+      color: #9ca3af;
+    }
+  }
+`;
+
+// Stats Grid
+const StatsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const StatsCard = styled.div`
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.2s;
+
+  &:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #1f2937;
+    border-color: #374151;
+  }
+`;
+
+const StatsHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+`;
+
+const StatsTitle = styled.div`
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  @media (prefers-color-scheme: dark) {
+    color: #9ca3af;
+  }
+`;
+
+const StatsIcon = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: #f3f4f6;
+  border-radius: 0.5rem;
+  color: #6b7280;
+
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #374151;
+    color: #9ca3af;
+  }
+`;
+
+const StatsValue = styled.div`
+  font-size: 1.875rem;
+  font-weight: 600;
+  color: #111827;
+
+  @media (prefers-color-scheme: dark) {
+    color: white;
+  }
+`;
+
+// Filter Card
+const FilterCard = styled.div`
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  margin-bottom: 1.5rem;
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #1f2937;
+    border-color: #374151;
+  }
+`;
+
+const FilterContent = styled.div`
+  padding: 1.25rem;
+`;
+
+const FilterRow = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+`;
+
+const SearchWrapper = styled.div`
+  position: relative;
+  flex: 1;
+  min-width: 300px;
+
+  svg {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1rem;
+    height: 1rem;
+    color: #9ca3af;
+  }
+`;
+
+const SearchInput = styled.input`
+  width: 100%;
+  padding: 0.625rem 0.75rem 0.625rem 2.25rem;
+  font-size: 0.875rem;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: white;
+
+    &:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    }
+  }
+`;
+
+const SelectWrapper = styled.div`
+  position: relative;
+  min-width: 160px;
+
+  select {
+    appearance: none;
+    width: 100%;
+    padding: 0.625rem 2rem 0.625rem 2.25rem;
+    font-size: 0.875rem;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    color: #374151;
+    
+    &:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      background-color: #374151;
+      border-color: #4b5563;
+      color: white;
+    }
+  }
+
+  svg {
+    position: absolute;
+    pointer-events: none;
+    
+    &:first-of-type {
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1rem;
+      height: 1rem;
+      color: #9ca3af;
+    }
+    
+    &:last-of-type {
+      right: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1rem;
+      height: 1rem;
+      color: #9ca3af;
+    }
+  }
+`;
+
+const ClearButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  color: #4b5563;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: #f9fafb;
+    color: #111827;
+  }
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: #d1d5db;
+
+    &:hover {
+      background-color: #4b5563;
+      color: white;
+    }
+  }
+`;
+
+// Subscription Plans Grid
+const PlansGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const PlanCard = styled.div`
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.2s;
+
+  &:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #1f2937;
+    border-color: #374151;
+  }
+`;
+
+const PlanHeader = styled.div`
+  padding: 1.5rem;
+  background-color: #f3f4f6;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #2d3748;
+    border-bottom-color: #4b5563;
+  }
+`;
+
+const PlanName = styled.h3`
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: #111827;
+
+  @media (prefers-color-scheme: dark) {
+    color: white;
+  }
+`;
+
+const PlanIcon = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  background-color: #e5e7eb;
+  border-radius: 9999px;
+  color: #6b7280;
+
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #4b5563;
+    color: #9ca3af;
+  }
+`;
+
+const PlanContent = styled.div`
+  padding: 1.5rem;
+`;
+
+const SectionTitle = styled.h4`
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+    color: #6b7280;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    color: #e5e7eb;
+
+    svg {
+      color: #9ca3af;
+    }
+  }
+`;
+
+const QuotaGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+`;
+
+const QuotaItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+`;
+
+const QuotaLabel = styled.span`
+  font-size: 0.75rem;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+
+  svg {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    color: #9ca3af;
+  }
+`;
+
+const QuotaValue = styled.span`
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #111827;
+  line-height: 1.2;
+
+  @media (prefers-color-scheme: dark) {
+    color: white;
+  }
+`;
+
+const PointsSection = styled.div`
+  border-top: 1px solid #e5e7eb;
+  padding-top: 1.5rem;
+  margin-top: 0.5rem;
+
+  @media (prefers-color-scheme: dark) {
+    border-top-color: #374151;
+  }
+`;
+
+const PointsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+`;
+
+const PointsItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+`;
+
+const PointsLabel = styled.span`
+  font-size: 0.7rem;
+  color: #6b7280;
+
+  @media (prefers-color-scheme: dark) {
+    color: #9ca3af;
+  }
+`;
+
+const PointsValue = styled.span`
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+
+  svg {
+    width: 0.875rem;
+    height: 0.875rem;
+    color: #6b7280;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    color: white;
+
+    svg {
+      color: #9ca3af;
+    }
+  }
+`;
+
+const EditButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 1rem;
+  background-color: white;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: #f9fafb;
+    border-color: #d1d5db;
+  }
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+    color: #6b7280;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #374151;
+    color: #e5e7eb;
+    border-color: #4b5563;
+
+    &:hover {
+      background-color: #4b5563;
+    }
+
+    svg {
+      color: #9ca3af;
+    }
+  }
+`;
+
+// Mock Data
+const plans = [
+  {
+    id: 'free',
+    name: 'Free',
+    icon: Zap,
+    quotas: {
+      downloads: 5,
+      notes: 3,
+      questionPapers: 2,
+      freeQuota: 0
+    },
+    points: {
+      perTest: 5,
+      perUpload: 2,
+      bonus: 0
+    }
+  },
+  {
+    id: 'pro',
+    name: 'Pro',
+    icon: Star,
+    quotas: {
+      downloads: 50,
+      notes: 30,
+      questionPapers: 20,
+      freeQuota: 10
+    },
+    points: {
+      perTest: 10,
+      perUpload: 5,
+      bonus: 50
+    }
+  },
+  {
+    id: 'max',
+    name: 'Max',
+    icon: Crown,
+    quotas: {
+      downloads: 200,
+      notes: 100,
+      questionPapers: 80,
+      freeQuota: 30
+    },
+    points: {
+      perTest: 15,
+      perUpload: 8,
+      bonus: 100
+    }
+  },
+  {
+    id: 'ultra',
+    name: 'Ultra',
+    icon: Award,
+    quotas: {
+      downloads: 1499,
+      notes: 100,
+      questionPapers: 80,
+      freeQuota: 50
+    },
+    points: {
+      perTest: 25,
+      perUpload: 15,
+      bonus: 200
+    }
+  }
+];
+
+const SubscriptionPlans = () => {
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+
+  // Stats data
+  const stats = [
+    { label: 'Total Plans', value: '4', icon: Crown },
+    { label: 'Active Subscribers', value: '1,245', icon: Users },
+    { label: 'Monthly Revenue', value: '$12,450', icon: DollarSign },
+    { label: 'Growth', value: '+23%', icon: TrendingUp },
+  ];
+
+  const filteredPlans = plans.filter(plan =>
+    plan.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  return (
+    <ContentWrapper>
+      {/* Header */}
+      <HeaderSection>
+        <TitleSection>
+          <h1>Subscription Plans</h1>
+          <p>Manage pricing, quotas, and point rewards for each plan</p>
+        </TitleSection>
+        <ButtonGroup>
+          <PrimaryButton onClick={() => navigate('/subscriptions/create')}>
+            <Plus size={16} />
+            New Plan
+          </PrimaryButton>
+        </ButtonGroup>
+      </HeaderSection>
+
+      {/* Stats Cards */}
+      <StatsGrid>
+        {stats.map((stat, index) => {
+          const Icon = stat.icon;
+          return (
+            <StatsCard key={index}>
+              <StatsHeader>
+                <StatsTitle>{stat.label}</StatsTitle>
+                <StatsIcon>
+                  <Icon />
+                </StatsIcon>
+              </StatsHeader>
+              <StatsValue>{stat.value}</StatsValue>
+            </StatsCard>
+          );
+        })}
+      </StatsGrid>
+
+      {/* Filter Bar */}
+      <FilterCard>
+        <FilterContent>
+          <FilterRow>
+            <SearchWrapper>
+              <Search size={16} />
+              <SearchInput
+                type="text"
+                placeholder="Search plans..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </SearchWrapper>
+
+            <SelectWrapper>
+              <Filter size={16} />
+              <select 
+                value={statusFilter} 
+                onChange={(e) => setStatusFilter(e.target.value)}
+              >
+                <option value="all">All Plans</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+              <ChevronDown size={16} />
+            </SelectWrapper>
+
+            {searchTerm && (
+              <ClearButton onClick={() => setSearchTerm('')}>
+                <X size={16} />
+                Clear
+              </ClearButton>
+            )}
+          </FilterRow>
+        </FilterContent>
+      </FilterCard>
+
+      {/* Subscription Plans Grid */}
+      <PlansGrid>
+        {filteredPlans.map((plan) => {
+          const Icon = plan.icon;
+          return (
+            <PlanCard key={plan.id}>
+              <PlanHeader>
+                <PlanName>{plan.name}</PlanName>
+                <PlanIcon>
+                  <Icon />
+                </PlanIcon>
+              </PlanHeader>
+
+              <PlanContent>
+                {/* Quotas Section */}
+                <SectionTitle>
+                  <Download size={16} />
+                  Downloads & Notes
+                </SectionTitle>
+                <QuotaGrid>
+                  <QuotaItem>
+                    <QuotaLabel>
+                      <Download size={12} />
+                      Downloads
+                    </QuotaLabel>
+                    <QuotaValue>
+                      {plan.quotas.downloads}
+                    </QuotaValue>
+                  </QuotaItem>
+                  <QuotaItem>
+                    <QuotaLabel>
+                      <FileText size={12} />
+                      Notes
+                    </QuotaLabel>
+                    <QuotaValue>
+                      {plan.quotas.notes}
+                    </QuotaValue>
+                  </QuotaItem>
+                  <QuotaItem>
+                    <QuotaLabel>
+                      <HelpCircle size={12} />
+                      Question Papers
+                    </QuotaLabel>
+                    <QuotaValue>
+                      {plan.quotas.questionPapers}
+                    </QuotaValue>
+                  </QuotaItem>
+                  <QuotaItem>
+                    <QuotaLabel>
+                      <Award size={12} />
+                      Free Quota
+                    </QuotaLabel>
+                    <QuotaValue>
+                      {plan.quotas.freeQuota}
+                    </QuotaValue>
+                  </QuotaItem>
+                </QuotaGrid>
+
+                {/* Points Section */}
+                <PointsSection>
+                  <SectionTitle>
+                    <Zap size={16} />
+                    Points
+                  </SectionTitle>
+                  <PointsGrid>
+                    <PointsItem>
+                      <PointsLabel>Per Test</PointsLabel>
+                      <PointsValue>
+                        <Zap size={14} />
+                        {plan.points.perTest} pts
+                      </PointsValue>
+                    </PointsItem>
+                    <PointsItem>
+                      <PointsLabel>Per Upload</PointsLabel>
+                      <PointsValue>
+                        <Zap size={14} />
+                        {plan.points.perUpload} pts
+                      </PointsValue>
+                    </PointsItem>
+                    <PointsItem>
+                      <PointsLabel>Bonus</PointsLabel>
+                      <PointsValue>
+                        <Award size={14} />
+                        {plan.points.bonus} pts
+                      </PointsValue>
+                    </PointsItem>
+                  </PointsGrid>
+                </PointsSection>
+
+                {/* Edit Button */}
+                <EditButton onClick={() => navigate(`/subscriptions/${plan.id}/edit`)}>
+                  <Edit size={16} />
+                  Edit Plan
+                </EditButton>
+              </PlanContent>
+            </PlanCard>
+          );
+        })}
+      </PlansGrid>
+    </ContentWrapper>
+  );
+};
+
+export default SubscriptionPlans;
