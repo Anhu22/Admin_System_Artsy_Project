@@ -258,18 +258,7 @@ const RoleTab = styled.button<{ $active: boolean }>`
   }
 `;
 
-// Two Column Layout for Permissions
-const TwoColumnLayout = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  padding: 1.5rem;
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
-`;
-
+// Permission Column Component
 const PermissionColumn = styled.div`
   display: flex;
   flex-direction: column;
@@ -331,6 +320,10 @@ const PermissionBadge = styled.span<{ $type?: string }>`
       case 'export': return '#f3f4f6';
       case 'block': return '#fef2f2';
       case 'assign-points': return '#fef3c7';
+      case 'edit': return '#eff6ff';
+      case 'delete': return '#fef2f2';
+      case 'publish': return '#fef3c7';
+      case 'approve': return '#ecfdf5';
       default: return '#f3f4f6';
     }
   }};
@@ -340,6 +333,10 @@ const PermissionBadge = styled.span<{ $type?: string }>`
       case 'export': return '#374151';
       case 'block': return '#991b1b';
       case 'assign-points': return '#92400e';
+      case 'edit': return '#1e40af';
+      case 'delete': return '#991b1b';
+      case 'publish': return '#92400e';
+      case 'approve': return '#065f46';
       default: return '#374151';
     }
   }};
@@ -349,6 +346,10 @@ const PermissionBadge = styled.span<{ $type?: string }>`
       case 'export': return '#e5e7eb';
       case 'block': return '#fecaca';
       case 'assign-points': return '#fde68a';
+      case 'edit': return '#bfdbfe';
+      case 'delete': return '#fecaca';
+      case 'publish': return '#fde68a';
+      case 'approve': return '#d1fae5';
       default: return '#e5e7eb';
     }
   }};
@@ -360,6 +361,10 @@ const PermissionBadge = styled.span<{ $type?: string }>`
         case 'export': return 'rgba(55, 65, 81, 0.5)';
         case 'block': return 'rgba(220, 38, 38, 0.2)';
         case 'assign-points': return 'rgba(245, 158, 11, 0.2)';
+        case 'edit': return 'rgba(37, 99, 235, 0.2)';
+        case 'delete': return 'rgba(220, 38, 38, 0.2)';
+        case 'publish': return 'rgba(245, 158, 11, 0.2)';
+        case 'approve': return 'rgba(16, 185, 129, 0.2)';
         default: return 'rgba(55, 65, 81, 0.5)';
       }
     }};
@@ -369,6 +374,10 @@ const PermissionBadge = styled.span<{ $type?: string }>`
         case 'export': return '#d1d5db';
         case 'block': return '#fca5a5';
         case 'assign-points': return '#fcd34d';
+        case 'edit': return '#93c5fd';
+        case 'delete': return '#fca5a5';
+        case 'publish': return '#fcd34d';
+        case 'approve': return '#86efac';
         default: return '#d1d5db';
       }
     }};
@@ -378,6 +387,10 @@ const PermissionBadge = styled.span<{ $type?: string }>`
         case 'export': return 'rgba(75, 85, 99, 0.5)';
         case 'block': return 'rgba(220, 38, 38, 0.3)';
         case 'assign-points': return 'rgba(245, 158, 11, 0.3)';
+        case 'edit': return 'rgba(37, 99, 235, 0.3)';
+        case 'delete': return 'rgba(220, 38, 38, 0.3)';
+        case 'publish': return 'rgba(245, 158, 11, 0.3)';
+        case 'approve': return 'rgba(16, 185, 129, 0.3)';
         default: return 'rgba(75, 85, 99, 0.5)';
       }
     }};
@@ -849,32 +862,32 @@ const RolePerformanceTab = () => {
   // Stats data for role performance
   const roleStats = {
     'super-admin': {
-      totalPermissions: 24,
-      activePermissions: 24,
+      totalPermissions: 32,
+      activePermissions: 32,
       lastActive: '2 minutes ago',
-      usageRate: '98%'
+      usageRate: '100%'
     },
     'admin': {
-      totalPermissions: 22,
-      activePermissions: 20,
+      totalPermissions: 28,
+      activePermissions: 26,
       lastActive: '5 minutes ago',
-      usageRate: '91%'
-    },
-    'manager': {
-      totalPermissions: 15,
-      activePermissions: 14,
-      lastActive: '15 minutes ago',
       usageRate: '93%'
     },
+    'manager': {
+      totalPermissions: 20,
+      activePermissions: 18,
+      lastActive: '15 minutes ago',
+      usageRate: '90%'
+    },
     'student': {
-      totalPermissions: 8,
-      activePermissions: 8,
+      totalPermissions: 10,
+      activePermissions: 10,
       lastActive: '1 minute ago',
       usageRate: '100%'
     }
   };
 
-  // Permission items organized exactly as shown in the image
+  // Permission items organized in three columns
   const leftColumnPermissions = [
     { icon: Eye, text: 'dashboard' },
     { icon: Users, text: 'users → role change', badge: { type: 'role-change', label: 'role change' } },
@@ -885,7 +898,7 @@ const RolePerformanceTab = () => {
     { icon: Award, text: 'points rules' },
   ];
 
-  const rightColumnPermissions = [
+  const middleColumnPermissions = [
     { icon: Users, text: 'users' },
     { icon: Lock, text: 'users → block', badge: { type: 'block', label: 'block' } },
     { icon: FileText, text: 'documents' },
@@ -893,6 +906,16 @@ const RolePerformanceTab = () => {
     { icon: Users, text: 'student questions' },
     { icon: CreditCard, text: 'subscriptions' },
     { icon: Settings, text: 'test settings' },
+  ];
+
+  const rightColumnPermissions = [
+    { icon: Users, text: 'users → edit', badge: { type: 'edit', label: 'edit' } },
+    { icon: DollarSign, text: 'payments' },
+    { icon: FileText, text: 'documents → delete', badge: { type: 'delete', label: 'delete' } },
+    { icon: HelpCircle, text: 'questions → publish', badge: { type: 'publish', label: 'publish' } },
+    { icon: Users, text: 'student questions → approve', badge: { type: 'approve', label: 'approve' } },
+    { icon: CreditCard, text: 'subscriptions → delete', badge: { type: 'delete', label: 'delete' } },
+    { icon: Settings, text: 'system settings' },
   ];
 
   // All menu items for visibility
@@ -1032,11 +1055,36 @@ const RolePerformanceTab = () => {
           ))}
         </RoleTabs>
 
-        {/* Two Column Permission Layout */}
-        <TwoColumnLayout>
+        {/* Three Column Permission Layout */}
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: '1fr 1fr 1fr', 
+          gap: '1.5rem', 
+          padding: '1.5rem' 
+        }}>
           {/* Left Column - 7 items */}
           <PermissionColumn>
             {leftColumnPermissions.map((item, index) => (
+              <PermissionItem key={index}>
+                <PermissionIcon>
+                  <item.icon />
+                </PermissionIcon>
+                <PermissionText>
+                  {item.text}
+                  {item.badge && (
+                    <PermissionBadge $type={item.badge.type}>
+                      {item.badge.label}
+                    </PermissionBadge>
+                  )}
+                </PermissionText>
+                <ToggleSwitch $active={activeRoleTab === 'admin' || activeRoleTab === 'super-admin'} />
+              </PermissionItem>
+            ))}
+          </PermissionColumn>
+
+          {/* Middle Column - 7 items */}
+          <PermissionColumn>
+            {middleColumnPermissions.map((item, index) => (
               <PermissionItem key={index}>
                 <PermissionIcon>
                   <item.icon />
@@ -1073,7 +1121,7 @@ const RolePerformanceTab = () => {
               </PermissionItem>
             ))}
           </PermissionColumn>
-        </TwoColumnLayout>
+        </div>
 
         {/* Admin Footer with Save Button */}
         <AdminFooter>

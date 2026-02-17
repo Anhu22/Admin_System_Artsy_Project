@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import {
   Download,
@@ -18,7 +17,9 @@ import {
   Download as DownloadIcon,
   Users,
   DollarSign,
-  TrendingUp
+  TrendingUp,
+  Check,
+  AlertCircle
 } from 'lucide-react';
 
 // Styled Components
@@ -624,6 +625,234 @@ const EditButton = styled.button`
   }
 `;
 
+// Dialog Overlay
+const DialogOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+`;
+
+const DialogContent = styled.div`
+  background-color: white;
+  border-radius: 1rem;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #1f2937;
+  }
+`;
+
+const DialogHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+
+  @media (prefers-color-scheme: dark) {
+    border-bottom-color: #374151;
+  }
+`;
+
+const DialogTitle = styled.h2`
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+
+  @media (prefers-color-scheme: dark) {
+    color: white;
+  }
+`;
+
+const CloseButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background: none;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  color: #6b7280;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: #f3f4f6;
+    color: #111827;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    color: #9ca3af;
+
+    &:hover {
+      background-color: #374151;
+      color: white;
+    }
+  }
+`;
+
+const DialogBody = styled.div`
+  padding: 1.5rem;
+`;
+
+const FormGroup = styled.div`
+  margin-bottom: 1.25rem;
+`;
+
+const FormLabel = styled.label`
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.5rem;
+
+  @media (prefers-color-scheme: dark) {
+    color: #e5e7eb;
+  }
+`;
+
+const FormInput = styled.input`
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  font-size: 0.875rem;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+  color: #111827;
+
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: white;
+
+    &:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    }
+  }
+`;
+
+const FormSelect = styled.select`
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  font-size: 0.875rem;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  color: #111827;
+  transition: all 0.2s;
+
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: white;
+
+    &:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    }
+  }
+`;
+
+const FormRow = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+`;
+
+const DialogFooter = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+
+  @media (prefers-color-scheme: dark) {
+    border-top-color: #374151;
+  }
+`;
+
+const SaveButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  background-color: #2563eb;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: #1d4ed8;
+  }
+
+  &:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+  }
+`;
+
+const CancelButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  background-color: white;
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: #f9fafb;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #374151;
+    color: #e5e7eb;
+    border-color: #4b5563;
+
+    &:hover {
+      background-color: #4b5563;
+    }
+  }
+`;
+
 // Mock Data
 const plans = [
   {
@@ -693,19 +922,139 @@ const plans = [
 ];
 
 const SubscriptionPlans = () => {
-  const navigate = useNavigate();
+  
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  
+  // State for plans (changed from const to useState to allow edits)
+  const [plansState, setPlansState] = useState(plans);
+  
+  // State for dialogs
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isNewPlanDialogOpen, setIsNewPlanDialogOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState(null);
+
+  // Form state for edit
+  const [editFormData, setEditFormData] = useState({
+    name: '',
+    icon: Zap,
+    quotas: { downloads: 0, notes: 0, questionPapers: 0, freeQuota: 0 },
+    points: { perTest: 0, perUpload: 0, bonus: 0 }
+  });
+
+  // Form state for new plan
+  const [newPlanFormData, setNewPlanFormData] = useState({
+    name: '',
+    icon: Star,
+    quotas: { downloads: 0, notes: 0, questionPapers: 0, freeQuota: 0 },
+    points: { perTest: 0, perUpload: 0, bonus: 0 }
+  });
+
+  // Icon options
+  const iconOptions = [
+    { name: 'Zap', icon: Zap },
+    { name: 'Star', icon: Star },
+    { name: 'Crown', icon: Crown },
+    { name: 'Award', icon: Award },
+  ];
+
+  // Handlers
+  const handleEditClick = (plan) => {
+    setSelectedPlan(plan);
+    setEditFormData({
+      name: plan.name,
+      icon: plan.icon,
+      quotas: { ...plan.quotas },
+      points: { ...plan.points }
+    });
+    setIsEditDialogOpen(true);
+  };
+
+  const handleEditSave = () => {
+    const updatedPlans = plansState.map(p => 
+      p.id === selectedPlan.id ? { ...p, ...editFormData, id: p.id } : p
+    );
+    setPlansState(updatedPlans);
+    setIsEditDialogOpen(false);
+    setSelectedPlan(null);
+  };
+
+  const handleNewPlanClick = () => {
+    setNewPlanFormData({
+      name: '',
+      icon: Star,
+      quotas: { downloads: 0, notes: 0, questionPapers: 0, freeQuota: 0 },
+      points: { perTest: 0, perUpload: 0, bonus: 0 }
+    });
+    setIsNewPlanDialogOpen(true);
+  };
+
+  const handleNewPlanCreate = () => {
+    const newPlan = {
+      id: `plan-${Date.now()}`,
+      ...newPlanFormData
+    };
+    setPlansState([...plansState, newPlan]);
+    setIsNewPlanDialogOpen(false);
+  };
+
+  const handleQuotaChange = (e, formType, field) => {
+    const { value } = e.target;
+    if (formType === 'edit') {
+      setEditFormData(prev => ({
+        ...prev,
+        quotas: { ...prev.quotas, [field]: parseInt(value) || 0 }
+      }));
+    } else {
+      setNewPlanFormData(prev => ({
+        ...prev,
+        quotas: { ...prev.quotas, [field]: parseInt(value) || 0 }
+      }));
+    }
+  };
+
+  const handlePointsChange = (e, formType, field) => {
+    const { value } = e.target;
+    if (formType === 'edit') {
+      setEditFormData(prev => ({
+        ...prev,
+        points: { ...prev.points, [field]: parseInt(value) || 0 }
+      }));
+    } else {
+      setNewPlanFormData(prev => ({
+        ...prev,
+        points: { ...prev.points, [field]: parseInt(value) || 0 }
+      }));
+    }
+  };
+
+  const handleIconChange = (e, formType) => {
+    const selectedIcon = iconOptions.find(opt => opt.name === e.target.value);
+    if (formType === 'edit') {
+      setEditFormData(prev => ({ ...prev, icon: selectedIcon.icon }));
+    } else {
+      setNewPlanFormData(prev => ({ ...prev, icon: selectedIcon.icon }));
+    }
+  };
+
+  const handleNameChange = (e, formType) => {
+    const { value } = e.target;
+    if (formType === 'edit') {
+      setEditFormData(prev => ({ ...prev, name: value }));
+    } else {
+      setNewPlanFormData(prev => ({ ...prev, name: value }));
+    }
+  };
 
   // Stats data
-  const stats = [
-    { label: 'Total Plans', value: '4', icon: Crown },
+  {/*const stats = [
+    { label: 'Total Plans', value: plansState.length.toString(), icon: Crown },
     { label: 'Active Subscribers', value: '1,245', icon: Users },
     { label: 'Monthly Revenue', value: '$12,450', icon: DollarSign },
     { label: 'Growth', value: '+23%', icon: TrendingUp },
-  ];
+  ];*/}
 
-  const filteredPlans = plans.filter(plan =>
+  const filteredPlans = plansState.filter(plan =>
     plan.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -718,7 +1067,7 @@ const SubscriptionPlans = () => {
           <p>Manage pricing, quotas, and point rewards for each plan</p>
         </TitleSection>
         <ButtonGroup>
-          <PrimaryButton onClick={() => navigate('/subscriptions/create')}>
+          <PrimaryButton onClick={handleNewPlanClick}>
             <Plus size={16} />
             New Plan
           </PrimaryButton>
@@ -726,7 +1075,7 @@ const SubscriptionPlans = () => {
       </HeaderSection>
 
       {/* Stats Cards */}
-      <StatsGrid>
+      {/*<StatsGrid>
         {stats.map((stat, index) => {
           const Icon = stat.icon;
           return (
@@ -741,7 +1090,7 @@ const SubscriptionPlans = () => {
             </StatsCard>
           );
         })}
-      </StatsGrid>
+      </StatsGrid>*/}
 
       {/* Filter Bar */}
       <FilterCard>
@@ -870,7 +1219,7 @@ const SubscriptionPlans = () => {
                 </PointsSection>
 
                 {/* Edit Button */}
-                <EditButton onClick={() => navigate(`/subscriptions/${plan.id}/edit`)}>
+                <EditButton onClick={() => handleEditClick(plan)}>
                   <Edit size={16} />
                   Edit Plan
                 </EditButton>
@@ -879,6 +1228,207 @@ const SubscriptionPlans = () => {
           );
         })}
       </PlansGrid>
+
+      {/* Edit Plan Dialog */}
+      {isEditDialogOpen && (
+        <DialogOverlay onClick={() => setIsEditDialogOpen(false)}>
+          <DialogContent onClick={(e) => e.stopPropagation()}>
+            <DialogHeader>
+              <DialogTitle>Edit Plan</DialogTitle>
+              <CloseButton onClick={() => setIsEditDialogOpen(false)}>
+                <X size={20} />
+              </CloseButton>
+            </DialogHeader>
+            <DialogBody>
+              <FormGroup>
+                <FormLabel>Plan Name</FormLabel>
+                <FormInput
+                  type="text"
+                  value={editFormData.name}
+                  onChange={(e) => handleNameChange(e, 'edit')}
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>Plan Icon</FormLabel>
+                <FormSelect value={iconOptions.find(opt => opt.icon === editFormData.icon)?.name || 'Zap'} onChange={(e) => handleIconChange(e, 'edit')}>
+                  {iconOptions.map(opt => (
+                    <option key={opt.name} value={opt.name}>{opt.name}</option>
+                  ))}
+                </FormSelect>
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>Downloads</FormLabel>
+                <FormInput
+                  type="number"
+                  value={editFormData.quotas.downloads}
+                  onChange={(e) => handleQuotaChange(e, 'edit', 'downloads')}
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>Notes</FormLabel>
+                <FormInput
+                  type="number"
+                  value={editFormData.quotas.notes}
+                  onChange={(e) => handleQuotaChange(e, 'edit', 'notes')}
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>Question Papers</FormLabel>
+                <FormInput
+                  type="number"
+                  value={editFormData.quotas.questionPapers}
+                  onChange={(e) => handleQuotaChange(e, 'edit', 'questionPapers')}
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>Free Quota</FormLabel>
+                <FormInput
+                  type="number"
+                  value={editFormData.quotas.freeQuota}
+                  onChange={(e) => handleQuotaChange(e, 'edit', 'freeQuota')}
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>Points per Test</FormLabel>
+                <FormInput
+                  type="number"
+                  value={editFormData.points.perTest}
+                  onChange={(e) => handlePointsChange(e, 'edit', 'perTest')}
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>Points per Upload</FormLabel>
+                <FormInput
+                  type="number"
+                  value={editFormData.points.perUpload}
+                  onChange={(e) => handlePointsChange(e, 'edit', 'perUpload')}
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>Bonus Points</FormLabel>
+                <FormInput
+                  type="number"
+                  value={editFormData.points.bonus}
+                  onChange={(e) => handlePointsChange(e, 'edit', 'bonus')}
+                />
+              </FormGroup>
+            </DialogBody>
+            <DialogFooter>
+              <CancelButton onClick={() => setIsEditDialogOpen(false)}>Cancel</CancelButton>
+              <SaveButton onClick={handleEditSave}>Save Changes</SaveButton>
+            </DialogFooter>
+          </DialogContent>
+        </DialogOverlay>
+      )}
+
+      {/* New Plan Dialog */}
+      {isNewPlanDialogOpen && (
+        <DialogOverlay onClick={() => setIsNewPlanDialogOpen(false)}>
+          <DialogContent onClick={(e) => e.stopPropagation()}>
+            <DialogHeader>
+              <DialogTitle>Create New Plan</DialogTitle>
+              <CloseButton onClick={() => setIsNewPlanDialogOpen(false)}>
+                <X size={20} />
+              </CloseButton>
+            </DialogHeader>
+            <DialogBody>
+              <FormGroup>
+                <FormLabel>Plan Name</FormLabel>
+                <FormInput
+                  type="text"
+                  value={newPlanFormData.name}
+                  onChange={(e) => handleNameChange(e, 'new')}
+                  placeholder="Enter plan name"
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>Plan Icon</FormLabel>
+                <FormSelect value={iconOptions.find(opt => opt.icon === newPlanFormData.icon)?.name || 'Star'} onChange={(e) => handleIconChange(e, 'new')}>
+                  {iconOptions.map(opt => (
+                    <option key={opt.name} value={opt.name}>{opt.name}</option>
+                  ))}
+                </FormSelect>
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>Downloads</FormLabel>
+                <FormInput
+                  type="number"
+                  value={newPlanFormData.quotas.downloads}
+                  onChange={(e) => handleQuotaChange(e, 'new', 'downloads')}
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>Notes</FormLabel>
+                <FormInput
+                  type="number"
+                  value={newPlanFormData.quotas.notes}
+                  onChange={(e) => handleQuotaChange(e, 'new', 'notes')}
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>Question Papers</FormLabel>
+                <FormInput
+                  type="number"
+                  value={newPlanFormData.quotas.questionPapers}
+                  onChange={(e) => handleQuotaChange(e, 'new', 'questionPapers')}
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>Free Quota</FormLabel>
+                <FormInput
+                  type="number"
+                  value={newPlanFormData.quotas.freeQuota}
+                  onChange={(e) => handleQuotaChange(e, 'new', 'freeQuota')}
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>Points per Test</FormLabel>
+                <FormInput
+                  type="number"
+                  value={newPlanFormData.points.perTest}
+                  onChange={(e) => handlePointsChange(e, 'new', 'perTest')}
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>Points per Upload</FormLabel>
+                <FormInput
+                  type="number"
+                  value={newPlanFormData.points.perUpload}
+                  onChange={(e) => handlePointsChange(e, 'new', 'perUpload')}
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>Bonus Points</FormLabel>
+                <FormInput
+                  type="number"
+                  value={newPlanFormData.points.bonus}
+                  onChange={(e) => handlePointsChange(e, 'new', 'bonus')}
+                />
+              </FormGroup>
+            </DialogBody>
+            <DialogFooter>
+              <CancelButton onClick={() => setIsNewPlanDialogOpen(false)}>Cancel</CancelButton>
+              <SaveButton onClick={handleNewPlanCreate}>Create Plan</SaveButton>
+            </DialogFooter>
+          </DialogContent>
+        </DialogOverlay>
+      )}
     </ContentWrapper>
   );
 };

@@ -28,7 +28,12 @@ import {
   Zap,
   BarChart3,
   Upload,
-  Award
+  Award,
+  FileJson,
+  FileSpreadsheet,
+  AlertTriangle,
+  Check,
+  Info
 } from 'lucide-react';
 
 // Global Styles
@@ -499,7 +504,7 @@ const TableCell = styled.td`
   }
 `;
 
-// Question specific components - MODIFIED: Removed QuestionIcon
+// Question specific components
 const QuestionCell = styled.div`
   display: flex;
   flex-direction: column;
@@ -1018,7 +1023,313 @@ const ContextMenuDivider = styled.div`
   }
 `;
 
-// Helper functions - MODIFIED: Removed getQuestionIcon and getQuestionIconColor as they're no longer needed
+// Create Question Dialog Components
+const DialogOverlay = styled.div`
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: fadeIn 0.2s ease-out;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+`;
+
+const DialogContainer = styled.div`
+  background-color: white;
+  border-radius: 0.75rem;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  animation: slideUp 0.3s ease-out;
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #1f2937;
+  }
+`;
+
+const DialogHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+
+  @media (prefers-color-scheme: dark) {
+    border-bottom-color: #374151;
+  }
+`;
+
+const DialogTitle = styled.h2`
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  svg {
+    color: #2563eb;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    color: white;
+
+    svg {
+      color: #60a5fa;
+    }
+  }
+`;
+
+const CloseButton = styled.button`
+  padding: 0.5rem;
+  background: none;
+  border: none;
+  border-radius: 0.375rem;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: #f3f4f6;
+    color: #374151;
+  }
+
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    color: #9ca3af;
+
+    &:hover {
+      background-color: #374151;
+      color: #e5e7eb;
+    }
+  }
+`;
+
+const DialogContent = styled.div`
+  padding: 1.5rem;
+`;
+
+const DialogFooter = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+
+  @media (prefers-color-scheme: dark) {
+    border-top-color: #374151;
+  }
+`;
+
+// Form Components
+const FormGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+`;
+
+const FormGroup = styled.div`
+  margin-bottom: 1rem;
+`;
+
+const FormLabel = styled.label`
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.5rem;
+
+  @media (prefers-color-scheme: dark) {
+    color: #e5e7eb;
+  }
+`;
+
+const FormInput = styled.input`
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  font-size: 0.875rem;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: white;
+
+    &:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    }
+  }
+`;
+
+const FormSelect = styled.select`
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  font-size: 0.875rem;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: white;
+  }
+`;
+
+const FormTextarea = styled.textarea`
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  font-size: 0.875rem;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+  min-height: 100px;
+  resize: vertical;
+
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: white;
+  }
+`;
+
+const OptionsSection = styled.div`
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #374151;
+  }
+`;
+
+const OptionsTitle = styled.h3`
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 1rem;
+
+  @media (prefers-color-scheme: dark) {
+    color: white;
+  }
+`;
+
+const OptionRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+`;
+
+const OptionInput = styled.input`
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #1f2937;
+    border-color: #4b5563;
+    color: white;
+  }
+`;
+
+const CorrectOptionCheckbox = styled.input`
+  width: 1rem;
+  height: 1rem;
+  accent-color: #2563eb;
+  cursor: pointer;
+`;
+
+const AddOptionButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  color: #2563eb;
+  background: none;
+  border: 1px dashed #2563eb;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+
+  &:hover {
+    background-color: #eff6ff;
+  }
+
+  svg {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    color: #60a5fa;
+    border-color: #60a5fa;
+
+    &:hover {
+      background-color: rgba(37, 99, 235, 0.2);
+    }
+  }
+`;
+
+// Helper functions
 const getDifficultyIcon = (difficulty) => {
   switch (difficulty) {
     case 'Easy': return <Zap size={12} />;
@@ -1123,6 +1434,22 @@ const QuestionBank = () => {
   const [statusFilter, setStatusFilter] = useState('all');
   const [contextMenu, setContextMenu] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
+  
+  // Create question dialog state
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [newQuestion, setNewQuestion] = useState({
+    question: '',
+    type: 'MCQ',
+    subject: '',
+    module: '',
+    difficulty: 'Medium',
+    points: 10,
+    status: 'Draft',
+    topic: '',
+    options: ['', '', '', ''],
+    correctOption: 0,
+    code: ''
+  });
 
   useEffect(() => {
     setQuestions(mockQuestions);
@@ -1188,6 +1515,119 @@ const QuestionBank = () => {
     closeContext();
   };
 
+  // Create question dialog handlers
+  const openCreateDialog = () => {
+    setIsCreateDialogOpen(true);
+    setNewQuestion({
+      question: '',
+      type: 'MCQ',
+      subject: '',
+      module: '',
+      difficulty: 'Medium',
+      points: 10,
+      status: 'Draft',
+      topic: '',
+      options: ['', '', '', ''],
+      correctOption: 0,
+      code: ''
+    });
+  };
+
+  const closeCreateDialog = () => {
+    setIsCreateDialogOpen(false);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewQuestion(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleOptionChange = (index, value) => {
+    const updatedOptions = [...newQuestion.options];
+    updatedOptions[index] = value;
+    setNewQuestion(prev => ({
+      ...prev,
+      options: updatedOptions
+    }));
+  };
+
+  const handleCorrectOptionChange = (index) => {
+    setNewQuestion(prev => ({
+      ...prev,
+      correctOption: index
+    }));
+  };
+
+  const addOption = () => {
+    setNewQuestion(prev => ({
+      ...prev,
+      options: [...prev.options, '']
+    }));
+  };
+
+  const removeOption = (index) => {
+    if (newQuestion.options.length <= 2) return;
+    
+    const updatedOptions = newQuestion.options.filter((_, i) => i !== index);
+    let updatedCorrectOption = newQuestion.correctOption;
+    
+    if (index === newQuestion.correctOption) {
+      updatedCorrectOption = 0;
+    } else if (index < newQuestion.correctOption) {
+      updatedCorrectOption = newQuestion.correctOption - 1;
+    }
+    
+    setNewQuestion(prev => ({
+      ...prev,
+      options: updatedOptions,
+      correctOption: updatedCorrectOption
+    }));
+  };
+
+  const handleCreateQuestion = () => {
+    // Validate form
+    if (!newQuestion.question || !newQuestion.subject || !newQuestion.module || !newQuestion.topic) {
+      alert('Please fill in all required fields');
+      return;
+    }
+
+    if (newQuestion.type === 'MCQ') {
+      const filledOptions = newQuestion.options.filter(opt => opt.trim() !== '');
+      if (filledOptions.length < 2) {
+        alert('Please provide at least 2 options for MCQ');
+        return;
+      }
+    }
+
+    // Create new question
+    const newId = questions.length + 1;
+    const questionToAdd = {
+      id: newId,
+      question: newQuestion.question,
+      type: newQuestion.type,
+      subject: newQuestion.subject,
+      module: newQuestion.module,
+      difficulty: newQuestion.difficulty,
+      points: parseInt(newQuestion.points),
+      status: newQuestion.status,
+      topic: newQuestion.topic,
+      lastUsed: 'Not used',
+      ...(newQuestion.type === 'MCQ' && {
+        options: newQuestion.options.filter(opt => opt.trim() !== ''),
+        correctOption: newQuestion.correctOption
+      }),
+      ...(newQuestion.type === 'Coding' && {
+        code: newQuestion.code
+      })
+    };
+
+    setQuestions(prev => [...prev, questionToAdd]);
+    closeCreateDialog();
+  };
+
   // Calculate stats
   const totalQuestions = questions.length;
   const publishedCount = questions.filter(q => q.status === 'Published').length;
@@ -1210,11 +1650,12 @@ const QuestionBank = () => {
                 <p>Create and manage exam questions</p>
               </TitleSection>
               <ButtonGroup>
-                <SecondaryButton onClick={() => navigate('/questions/upload')}>
+                {/* JSON Upload button commented out */}
+                {/* <SecondaryButton onClick={openUploadDialog}>
                   <Upload size={16} />
                   JSON Upload
-                </SecondaryButton>
-                <PrimaryButton onClick={() => navigate('/questions/create')}>
+                </SecondaryButton> */}
+                <PrimaryButton onClick={openCreateDialog}>
                   <Plus size={16} />
                   Create Question
                 </PrimaryButton>
@@ -1495,6 +1936,181 @@ const QuestionBank = () => {
               </ContextMenuItem>
             </ContextMenuContainer>
           </>
+        )}
+
+        {/* Create Question Dialog */}
+        {isCreateDialogOpen && (
+          <DialogOverlay onClick={closeCreateDialog}>
+            <DialogContainer onClick={e => e.stopPropagation()}>
+              <DialogHeader>
+                <DialogTitle>
+                  <Plus size={20} />
+                  Create New Question
+                </DialogTitle>
+                <CloseButton onClick={closeCreateDialog}>
+                  <X size={20} />
+                </CloseButton>
+              </DialogHeader>
+
+              <DialogContent>
+                <FormGrid>
+                  <FormGroup>
+                    <FormLabel>Question Type *</FormLabel>
+                    <FormSelect 
+                      name="type" 
+                      value={newQuestion.type} 
+                      onChange={handleInputChange}
+                    >
+                      <option value="MCQ">Multiple Choice (MCQ)</option>
+                      <option value="Coding">Coding</option>
+                      <option value="Written">Written</option>
+                    </FormSelect>
+                  </FormGroup>
+
+                  <FormGroup>
+                    <FormLabel>Difficulty *</FormLabel>
+                    <FormSelect 
+                      name="difficulty" 
+                      value={newQuestion.difficulty} 
+                      onChange={handleInputChange}
+                    >
+                      <option value="Easy">Easy</option>
+                      <option value="Medium">Medium</option>
+                      <option value="Hard">Hard</option>
+                    </FormSelect>
+                  </FormGroup>
+                </FormGrid>
+
+                <FormGrid>
+                  <FormGroup>
+                    <FormLabel>Subject *</FormLabel>
+                    <FormInput 
+                      type="text"
+                      name="subject"
+                      value={newQuestion.subject}
+                      onChange={handleInputChange}
+                      placeholder="e.g., OOP, DSA, DBMS"
+                    />
+                  </FormGroup>
+
+                  <FormGroup>
+                    <FormLabel>Module *</FormLabel>
+                    <FormInput 
+                      type="text"
+                      name="module"
+                      value={newQuestion.module}
+                      onChange={handleInputChange}
+                      placeholder="e.g., Module 1, Chapter 2"
+                    />
+                  </FormGroup>
+                </FormGrid>
+
+                <FormGrid>
+                  <FormGroup>
+                    <FormLabel>Topic *</FormLabel>
+                    <FormInput 
+                      type="text"
+                      name="topic"
+                      value={newQuestion.topic}
+                      onChange={handleInputChange}
+                      placeholder="e.g., Polymorphism, Arrays"
+                    />
+                  </FormGroup>
+
+                  <FormGroup>
+                    <FormLabel>Points *</FormLabel>
+                    <FormInput 
+                      type="number"
+                      name="points"
+                      value={newQuestion.points}
+                      onChange={handleInputChange}
+                      min="1"
+                      max="100"
+                    />
+                  </FormGroup>
+                </FormGrid>
+
+                <FormGroup>
+                  <FormLabel>Question Title *</FormLabel>
+                  <FormTextarea 
+                    name="question"
+                    value={newQuestion.question}
+                    onChange={handleInputChange}
+                    placeholder="Enter your question here..."
+                  />
+                </FormGroup>
+
+                {newQuestion.type === 'MCQ' && (
+                  <OptionsSection>
+                    <OptionsTitle>Answer Options</OptionsTitle>
+                    {newQuestion.options.map((option, index) => (
+                      <OptionRow key={index}>
+                        <CorrectOptionCheckbox
+                          type="radio"
+                          name="correctOption"
+                          checked={newQuestion.correctOption === index}
+                          onChange={() => handleCorrectOptionChange(index)}
+                        />
+                        <OptionInput
+                          type="text"
+                          value={option}
+                          onChange={(e) => handleOptionChange(index, e.target.value)}
+                          placeholder={`Option ${index + 1}`}
+                        />
+                        {newQuestion.options.length > 2 && (
+                          <ActionIconButton 
+                            onClick={() => removeOption(index)}
+                            title="Remove option"
+                            hoverColor="#dc2626"
+                          >
+                            <X size={14} />
+                          </ActionIconButton>
+                        )}
+                      </OptionRow>
+                    ))}
+                    <AddOptionButton onClick={addOption}>
+                      <Plus size={14} />
+                      Add Option
+                    </AddOptionButton>
+                  </OptionsSection>
+                )}
+
+                {newQuestion.type === 'Coding' && (
+                  <OptionsSection>
+                    <OptionsTitle>Code Template (Optional)</OptionsTitle>
+                    <FormTextarea 
+                      name="code"
+                      value={newQuestion.code}
+                      onChange={handleInputChange}
+                      placeholder="Provide starter code if needed..."
+                      style={{ minHeight: '150px', fontFamily: 'monospace' }}
+                    />
+                  </OptionsSection>
+                )}
+
+                <FormGroup>
+                  <FormLabel>Status</FormLabel>
+                  <FormSelect 
+                    name="status" 
+                    value={newQuestion.status} 
+                    onChange={handleInputChange}
+                  >
+                    <option value="Draft">Draft</option>
+                    <option value="Published">Published</option>
+                  </FormSelect>
+                </FormGroup>
+              </DialogContent>
+
+              <DialogFooter>
+                <SecondaryButton onClick={closeCreateDialog}>
+                  Cancel
+                </SecondaryButton>
+                <PrimaryButton onClick={handleCreateQuestion}>
+                  Create Question
+                </PrimaryButton>
+              </DialogFooter>
+            </DialogContainer>
+          </DialogOverlay>
         )}
       </PageContainer>
     </>

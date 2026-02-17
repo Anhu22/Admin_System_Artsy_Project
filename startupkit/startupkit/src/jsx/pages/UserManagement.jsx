@@ -1118,10 +1118,10 @@ const UserManagement = () => {
                 <h1>User Management</h1>
                 <p>Manage all platform users and their roles effectively.</p>
               </TitleSection>
-              <CreateButton onClick={() => navigate("/users/create")}>
+              {/*<CreateButton onClick={() => navigate("/users/create")}>
                 <Plus />
                 Create User
-              </CreateButton>
+              </CreateButton>*/}
             </HeaderSection>
 
             {/* Filters - All in one line - Matching Modules & Tests */}

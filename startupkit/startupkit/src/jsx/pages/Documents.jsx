@@ -932,6 +932,159 @@ const ContextMenuDivider = styled.div`
   }
 `;
 
+// Upload Dialog Styled Components
+const DialogOverlay = styled.div`
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+`;
+
+const DialogContent = styled.div`
+  background-color: white;
+  border-radius: 0.75rem;
+  width: 90%;
+  max-width: 640px;
+  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+  overflow: hidden;
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #1f2937;
+  }
+`;
+
+const DialogHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #e5e7eb;
+
+  @media (prefers-color-scheme: dark) {
+    border-bottom-color: #374151;
+  }
+`;
+
+const DialogTitle = styled.h3`
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+
+  @media (prefers-color-scheme: dark) {
+    color: white;
+  }
+`;
+
+const CloseButton = styled.button`
+  background: none;
+  border: none;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #6b7280;
+
+  &:hover { background-color: #f3f4f6; color: #111827; }
+
+  @media (prefers-color-scheme: dark) {
+    color: #9ca3af;
+    &:hover { background-color: #374151; color: white; }
+  }
+`;
+
+const DialogBody = styled.div`
+  padding: 1rem 1.25rem;
+`;
+
+const FormGroup = styled.div`
+  margin-bottom: 0.75rem;
+`;
+
+const FormLabel = styled.label`
+  display: block;
+  font-size: 0.875rem;
+  color: #374151;
+  margin-bottom: 0.375rem;
+
+  @media (prefers-color-scheme: dark) {
+    color: #e5e7eb;
+  }
+`;
+
+const FormInput = styled.input`
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background: white;
+  color: #111827;
+
+  &:focus { outline: none; border-color: #3b82f6; }
+
+  @media (prefers-color-scheme: dark) {
+    background: #374151;
+    border-color: #4b5563;
+    color: white;
+  }
+`;
+
+const FormSelect = styled.select`
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background: white;
+  color: #111827;
+
+  &:focus { outline: none; border-color: #3b82f6; }
+
+  @media (prefers-color-scheme: dark) {
+    background: #374151;
+    border-color: #4b5563;
+    color: white;
+  }
+`;
+
+const DialogFooter = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid #e5e7eb;
+
+  @media (prefers-color-scheme: dark) {
+    border-top-color: #374151;
+  }
+`;
+
+const SaveButton = styled.button`
+  padding: 0.5rem 0.875rem;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+
+  &:hover { background-color: #1d4ed8; }
+`;
+
+const CancelButton = styled.button`
+  padding: 0.5rem 0.875rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  color: #374151;
+  border-radius: 0.5rem;
+  cursor: pointer;
+
+  &:hover { background-color: #f9fafb; }
+`;
+
 
 const getDocumentIcon = (type) => {
   switch (type?.toLowerCase()) {
@@ -1001,6 +1154,16 @@ const DocumentsNotes = () => {
   const [typeFilter, setTypeFilter] = useState("All");
   const [contextMenu, setContextMenu] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
+  const [uploadForm, setUploadForm] = useState({
+    title: '',
+    type: 'PDF',
+    semester: '',
+    subject: '',
+    paid: 'Free',
+    status: 'Active',
+    file: null
+  });
 
   useEffect(() => {
     setDocuments(mockDocuments);
@@ -1056,6 +1219,45 @@ const DocumentsNotes = () => {
     setSearch("");
   };
 
+  // Upload dialog handlers
+  const handleUploadClick = () => {
+    setUploadForm({ title: '', type: 'PDF', semester: '', subject: '', paid: 'Free', status: 'Active', file: null });
+    setIsUploadDialogOpen(true);
+  };
+
+  const handleUploadClose = () => {
+    setIsUploadDialogOpen(false);
+  };
+
+  const handleUploadChange = (e) => {
+    const { name, value } = e.target;
+    setUploadForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files && e.target.files[0];
+    setUploadForm(prev => ({ ...prev, file }));
+  };
+
+  const handleUploadSubmit = () => {
+    const file = uploadForm.file;
+    const size = file ? `${(file.size / 1024 / 1024).toFixed(1)} MB` : '—';
+    const newDoc = {
+      id: Date.now(),
+      title: uploadForm.title || (file ? file.name : 'Untitled'),
+      type: uploadForm.type,
+      semester: uploadForm.semester || '—',
+      subject: uploadForm.subject || '—',
+      paid: uploadForm.paid,
+      status: uploadForm.status,
+      size,
+      pages: 0,
+      downloads: 0
+    };
+    setDocuments(prev => [newDoc, ...prev]);
+    setIsUploadDialogOpen(false);
+  };
+
   // Calculate stats
   //const totalPaid = documents.filter(doc => doc.paid === 'Paid').length;
   //const totalDownloads = documents.reduce((sum, doc) => sum + (doc.downloads || 0), 0);
@@ -1076,7 +1278,7 @@ const DocumentsNotes = () => {
                 <h1>Documents & Notes</h1>
                 <p>Upload and manage study materials</p>
               </TitleSection>
-              <CreateButton onClick={() => navigate("/documents/upload")}>
+              <CreateButton onClick={handleUploadClick}>
                 <Plus />
                 Upload Document {/* Upload Button*/}
               </CreateButton>
@@ -1345,6 +1547,73 @@ const DocumentsNotes = () => {
             </TableContainer>
           </ContentWrapper>
         </MainContent>
+
+        {/* Upload Dialog */}
+        {isUploadDialogOpen && (
+          <DialogOverlay onClick={handleUploadClose}>
+            <DialogContent onClick={(e) => e.stopPropagation()}>
+              <DialogHeader>
+                <DialogTitle>Upload Document</DialogTitle>
+                <CloseButton onClick={handleUploadClose}>
+                  <X />
+                </CloseButton>
+              </DialogHeader>
+              <DialogBody>
+                <FormGroup>
+                  <FormLabel>Title</FormLabel>
+                  <FormInput name="title" value={uploadForm.title} onChange={handleUploadChange} placeholder="Document title" />
+                </FormGroup>
+
+                <FormGroup>
+                  <FormLabel>Type</FormLabel>
+                  <FormSelect name="type" value={uploadForm.type} onChange={handleUploadChange}>
+                    <option value="PDF">PDF</option>
+                    <option value="Doc">Document</option>
+                    <option value="PPT">Presentation</option>
+                    <option value="Excel">Spreadsheet</option>
+                    <option value="Image">Image</option>
+                  </FormSelect>
+                </FormGroup>
+
+                <FormGroup>
+                  <FormLabel>Semester</FormLabel>
+                  <FormInput name="semester" value={uploadForm.semester} onChange={handleUploadChange} placeholder="e.g. 3rd" />
+                </FormGroup>
+
+                <FormGroup>
+                  <FormLabel>Subject</FormLabel>
+                  <FormInput name="subject" value={uploadForm.subject} onChange={handleUploadChange} placeholder="e.g. DSA" />
+                </FormGroup>
+
+                <FormGroup>
+                  <FormLabel>Access</FormLabel>
+                  <FormSelect name="paid" value={uploadForm.paid} onChange={handleUploadChange}>
+                    <option value="Free">Free</option>
+                    <option value="Paid">Paid</option>
+                  </FormSelect>
+                </FormGroup>
+
+                <FormGroup>
+                  <FormLabel>Status</FormLabel>
+                  <FormSelect name="status" value={uploadForm.status} onChange={handleUploadChange}>
+                    <option value="Active">Active</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Disabled">Disabled</option>
+                  </FormSelect>
+                </FormGroup>
+
+                <FormGroup>
+                  <FormLabel>File</FormLabel>
+                  <FormInput type="file" name="file" onChange={handleFileChange} />
+                </FormGroup>
+              </DialogBody>
+              <DialogFooter>
+                <CancelButton onClick={handleUploadClose}>Cancel</CancelButton>
+                <SaveButton onClick={handleUploadSubmit}>Upload</SaveButton>
+              </DialogFooter>
+            </DialogContent>
+          </DialogOverlay>
+        )}
 
         {/* Context Menu */}
         {contextMenu && selectedItem && (

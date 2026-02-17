@@ -249,47 +249,7 @@ function Header() {
 											<div className="media-box">
 												<ul className="d-flex flex-colunm gap-2 flex-wrap">
 													<li>
-														<Link to="/app-profile">
-															<div className="icon-box-lg"> {SVGICON.profile} <p> Profile </p> </div>
-														</Link>
-													</li>
-													<li>
-														<Link to="/message">
-															<div className="icon-box-lg"> {SVGICON.msg} <p>Message</p> </div>
-														</Link>
-													</li>
-													<li>
-														<Link to="/note">
-															<div className="icon-box-lg"> {SVGICON.taskboard} <p>Taskboard</p> </div>
-														</Link>
-													</li>
-													<li>
-														<Link to={"#"}>
-															<div className="icon-box-lg"> {SVGICON.help} <p>Help</p> </div>
-														</Link>
-													</li>
-													<li>
-														<div className="icon-box-lg"> {SVGICON.setting} <p>Settings</p> </div>
-													</li>
-													<li>
-														<div className="icon-box-lg">
-															<Link to={"#"}>
-																{SVGICON.security} <p>Security</p>
-															</Link>
-														</div>
-													</li>
-													<li>
-														<div className="icon-box-lg"> {SVGICON.plan} <p>Plans</p> </div>
-													</li>
-													<li>
-														<div className="icon-box-lg">
-															<Link to={"#"}>
-																{SVGICON.feedback} <p> Feedback </p>
-															</Link>
-														</div>
-													</li>
-													<li>
-														<Link to="/page-login">
+														<Link to="/login">
 															<div className="icon-box-lg"> {SVGICON.logout} <p> Logout </p> </div>
 														</Link>
 													</li>

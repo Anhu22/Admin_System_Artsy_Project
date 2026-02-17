@@ -612,6 +612,96 @@ const ContextMenuDivider = styled.div`
   margin: 0.375rem 0;
 `;
 
+// Upload Dialog Styled Components
+const DialogOverlay = styled.div`
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 60;
+`;
+
+const DialogBox = styled.div`
+  background: white;
+  width: 90%;
+  max-width: 800px;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+`;
+
+const DialogHeader = styled.div`
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #e5e7eb;
+`;
+
+const DialogTitle = styled.h3`
+  margin:0;
+  font-size:1.125rem;
+  font-weight:600;
+  color:#111827;
+`;
+
+const DialogBody = styled.div`
+  padding: 1rem 1.25rem;
+`;
+
+const FormField = styled.div`
+  margin-bottom: 0.75rem;
+`;
+
+const Label = styled.label`
+  display:block;
+  font-size:0.875rem;
+  color:#374151;
+  margin-bottom:0.375rem;
+`;
+
+const Input = styled.input`
+  width:100%;
+  padding:0.5rem 0.75rem;
+  border:1px solid #e5e7eb;
+  border-radius:0.5rem;
+`;
+
+const Select = styled.select`
+  width:100%;
+  padding:0.5rem 0.75rem;
+  border:1px solid #e5e7eb;
+  border-radius:0.5rem;
+`;
+
+const DialogFooter = styled.div`
+  display:flex;
+  gap:0.5rem;
+  justify-content:flex-end;
+  padding:0.75rem 1.25rem;
+  border-top:1px solid #e5e7eb;
+`;
+
+const ButtonPrimary = styled.button`
+  padding:0.5rem 0.875rem;
+  background:#2563eb;
+  color:white;
+  border:none;
+  border-radius:0.5rem;
+  cursor:pointer;
+`;
+
+const ButtonSecondary = styled.button`
+  padding:0.5rem 0.875rem;
+  background:white;
+  border:1px solid #e5e7eb;
+  color:#374151;
+  border-radius:0.5rem;
+  cursor:pointer;
+`;
+
 // Mock data
 const mockModules = [
   { id: 1, title: "Module 1 – Intro to Arrays", subject: "DSA", chapter: "Ch 1", test: "Linked", questions: "Set A", points: 20, paid: "Free", status: "Published" },
@@ -630,6 +720,19 @@ const ModulesTests = () => {
   const [statusFilter, setStatusFilter] = useState("All");
   const [contextMenu, setContextMenu] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
+  const [uploadForm, setUploadForm] = useState({
+    title: '',
+    subject: 'DSA',
+    chapter: '',
+    test: '',
+    questions: '',
+    points: '',
+    paid: 'Free',
+    status: 'Published',
+    semester: 'Sem 1',
+    file: null
+  });
 
   useEffect(() => {
     setModules(mockModules);
@@ -674,6 +777,41 @@ const ModulesTests = () => {
     closeContext();
   };
 
+  // Upload dialog handlers
+  const handleUploadClick = () => {
+    setUploadForm({ title: '', subject: 'DSA', chapter: '', test: '', questions: '', points: '', paid: 'Free', status: 'Published', semester: 'Sem 1', file: null });
+    setIsUploadDialogOpen(true);
+  };
+
+  const handleUploadClose = () => setIsUploadDialogOpen(false);
+
+  const handleUploadChange = (e) => {
+    const { name, value } = e.target;
+    setUploadForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files && e.target.files[0];
+    setUploadForm(prev => ({ ...prev, file }));
+  };
+
+  const handleUploadSubmit = () => {
+    const newModule = {
+      id: Date.now(),
+      title: uploadForm.title || (uploadForm.file ? uploadForm.file.name : 'Untitled Module'),
+      subject: uploadForm.subject,
+      chapter: uploadForm.chapter,
+      test: uploadForm.test || 'None',
+      questions: uploadForm.questions || '-',
+      points: uploadForm.points ? Number(uploadForm.points) : 0,
+      paid: uploadForm.paid,
+      status: uploadForm.status,
+      semester: uploadForm.semester
+    };
+    setModules(prev => [newModule, ...prev]);
+    setIsUploadDialogOpen(false);
+  };
+
   const clearFilters = () => {
     setSubjectFilter("All");
     setStatusFilter("All");
@@ -698,7 +836,7 @@ const ModulesTests = () => {
                 <h1>Modules & Tests</h1>
                 <p>Manage modules and linked tests.</p>
               </TitleSection>
-              <CreateButton onClick={() => navigate("/modules/create")}>
+              <CreateButton onClick={handleUploadClick}>
                 <Plus />
                 Upload Module {/* Create Button */}
               </CreateButton>
@@ -973,6 +1111,89 @@ const ModulesTests = () => {
               </ContextMenuItem>
             </ContextMenuContainer>
           </>
+        )}
+        {/* Upload Dialog */}
+        {isUploadDialogOpen && (
+          <DialogOverlay onClick={handleUploadClose}>
+            <DialogBox onClick={e => e.stopPropagation()}>
+              <DialogHeader>
+                <DialogTitle>Upload Module / Test</DialogTitle>
+                <button onClick={handleUploadClose} style={{background:'none',border:'none',cursor:'pointer'}}><X /></button>
+              </DialogHeader>
+              <DialogBody>
+                <div style={{display:'grid',gap:'0.75rem',gridTemplateColumns:'1fr 1fr'}}>
+                  <FormField style={{gridColumn:'1 / span 2'}}>
+                    <Label>Title</Label>
+                    <Input name="title" value={uploadForm.title} onChange={handleUploadChange} placeholder="Module title" />
+                  </FormField>
+
+                  <FormField>
+                    <Label>Subject</Label>
+                    <Select name="subject" value={uploadForm.subject} onChange={handleUploadChange}>
+                      <option>DSA</option>
+                      <option>OOP</option>
+                      <option>DBMS</option>
+                      <option>CN</option>
+                    </Select>
+                  </FormField>
+
+                  <FormField>
+                    <Label>Semester</Label>
+                    <Select name="semester" value={uploadForm.semester} onChange={handleUploadChange}>
+                      <option>Sem 1</option>
+                      <option>Sem 2</option>
+                    </Select>
+                  </FormField>
+
+                  <FormField>
+                    <Label>Chapter</Label>
+                    <Input name="chapter" value={uploadForm.chapter} onChange={handleUploadChange} placeholder="Chapter" />
+                  </FormField>
+
+                  <FormField>
+                    <Label>Test Name</Label>
+                    <Input name="test" value={uploadForm.test} onChange={handleUploadChange} placeholder="e.g. Set A" />
+                  </FormField>
+
+                  <FormField>
+                    <Label>Questions</Label>
+                    <Input name="questions" value={uploadForm.questions} onChange={handleUploadChange} type="number" />
+                  </FormField>
+
+                  <FormField>
+                    <Label>Points</Label>
+                    <Input name="points" value={uploadForm.points} onChange={handleUploadChange} type="number" />
+                  </FormField>
+
+                  <FormField>
+                    <Label>Access</Label>
+                    <Select name="paid" value={uploadForm.paid} onChange={handleUploadChange}>
+                      <option>Free</option>
+                      <option>Paid</option>
+                    </Select>
+                  </FormField>
+
+                  <FormField>
+                    <Label>Status</Label>
+                    <Select name="status" value={uploadForm.status} onChange={handleUploadChange}>
+                      <option>Published</option>
+                      <option>Pending</option>
+                      <option>Draft</option>
+                    </Select>
+                  </FormField>
+
+                  <FormField style={{gridColumn:'1 / span 2'}}>
+                    <Label>File</Label>
+                    <Input type="file" name="file" onChange={handleFileChange} />
+                  </FormField>
+                </div>
+              </DialogBody>
+              <DialogFooter>
+                <ButtonSecondary onClick={handleUploadClose}>Cancel</ButtonSecondary>
+                <ButtonPrimary onClick={handleUploadSubmit}>Upload</ButtonPrimary>
+              </DialogFooter>
+            </DialogBox>
+          </DialogOverlay>
         )}
       </PageContainer>
     </>

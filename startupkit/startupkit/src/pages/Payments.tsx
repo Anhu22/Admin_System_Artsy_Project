@@ -412,7 +412,14 @@ const ClearButton = styled.button`
   }
 `;
 
-const ExportButton = styled(ClearButton)``;
+const ExportButton = styled(ClearButton)`
+  background-color: #2563eb;
+  color: white;
+  border-color: #2563eb;
+  &:hover { 
+    background-color: #1d4ed8;
+    color: white; 
+    }`;
 
 // Table Components
 const TableContainer = styled.div`
@@ -1148,10 +1155,10 @@ const Payments = () => {
                 <h1>Payment Management</h1>
                 <p>Track and manage all payment transactions</p>
               </TitleSection>
-              <CreateButton onClick={() => navigate("/payments/create")}>
+              {/*<CreateButton onClick={() => navigate("/payments/create")}>
                 <Plus />
                 Create Invoice
-              </CreateButton>
+              </CreateButton>*/}
             </HeaderSection>
 
             {/* Stats Cards */}
