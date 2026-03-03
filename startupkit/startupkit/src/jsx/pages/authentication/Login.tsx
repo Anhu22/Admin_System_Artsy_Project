@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
-import { UserRole } from '../../../config/sidebarConfig';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -21,7 +20,7 @@ const Login: React.FC = () => {
 
   try {
     const response = await fetch(
-      `${(import.meta as any).env?.VITE_API_BASE_URL || 'http://127.0.0.1:8000'}/auth/login`,
+      `${(import.meta as any).env?.VITE_API_BASE_URL || 'http://127.0.0.1:8000'}/api/v1/auth/login`,
       {
         method: 'POST',
         headers: {
@@ -46,7 +45,7 @@ const Login: React.FC = () => {
 
       navigate('/dashboard');
     } else {
-      setError(data.detail || 'Invalid email or password');
+      setError(typeof data.detail === 'string' ? data.detail : JSON.stringify(data.detail) || 'Invalid email or password');
     }
   } catch (err) {
     setError('Server error. Please try again.');
