@@ -1,5 +1,6 @@
 // Customize Bootstrap
-@import './bs-custom';
+@use "sass:color";
+@use './bs-custom' as *;
 
 $strong:#646c9a;
 $border: #DEE1ED;
@@ -31,13 +32,13 @@ $d-text : #717579;
 /////////////////////////
 // Primary Light
 /////////////////////////
-$primary-light: lighten($primary, 60%);
-$secondary-light: lighten($secondary, 80%);
-$success-light: lighten($success, 55%);
-$warning-light: lighten($warning, 35%);
-$danger-light: lighten($danger, 45%);
-$info-light: lighten($info, 50%);
-$dark-light: lighten($dark, 70%);
+$primary-light: color.adjust($primary, $lightness: 60%);
+$secondary-light: color.adjust($secondary, $lightness: 80%);
+$success-light: color.adjust($success, $lightness: 55%);
+$warning-light: color.adjust($warning, $lightness: 35%);
+$danger-light: color.adjust($danger, $lightness: 45%);
+$info-light: color.adjust($info, $lightness: 50%);
+$dark-light: color.adjust($dark, $lightness: 70%);
 
 /////////////////////////
 // Opacity 
@@ -150,8 +151,8 @@ $ic-row: row wrap;
 	--secondary: #{$secondary};
 	--secondary-light: #{$secondary-light};
 	--primary-light: #{rgba($primary, 0.05)};
-	--primary-hover: #{darken($primary, 10)};
-	--primary-dark: #{darken($primary, 30)};
+	--primary-hover: #{color.adjust($primary, $lightness: -10%)};
+	--primary-dark: #{color.adjust($primary, $lightness: -30%)};
 	--rgba-primary-1: #{rgba($primary, 0.1)};
 	--rgba-primary-2: #{rgba($primary, 0.2)};
 	--rgba-primary-3: #{rgba($primary, 0.3)};

@@ -1,8 +1,8 @@
 import { useContext, useEffect } from 'react'; 
-import Home from './Home'
-import { ThemeContext } from '../../../context/ThemeContext';
+import SystemSettings from './SystemSettings'
+import { ThemeContext } from '../context/ThemeContext';
 
-const DashboardDark = () => {
+const SystemSettingsDark = () => {
 	const { changeBackground } = useContext(ThemeContext);
 	useEffect(() => {
 		changeBackground({ value: "dark", label: "Dark" });
@@ -10,8 +10,8 @@ const DashboardDark = () => {
 	
 	return (
 		<>
-			<Home />
+			<SystemSettings />
 		</>
 	)
 }
-export default DashboardDark;
+export default SystemSettingsDark;

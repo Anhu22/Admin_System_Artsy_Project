@@ -1,3 +1,5 @@
+@use './variable' as *;
+
 $borders: (
     "right", "left", "top", "bottom", ""
 );

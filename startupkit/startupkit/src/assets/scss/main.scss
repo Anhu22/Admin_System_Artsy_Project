@@ -60,12 +60,14 @@
 ////////////////////
 // Abstracts
 ////////////////////
-@import "./abstracts/abstracts";
+// use the module bundle; `as *` keeps old global names available
+@use "./abstracts/abstracts" as *;
 
 //Importing the RTL-specific variables file//
-//@import "bs_rtl.scss";
+//@use "bs_rtl.scss" as *;
 
-//bootstrap library scss files
+// bootstrap library scss files
+// vendor code still uses @import internally; consider upgrading bootstrap to eliminate its warnings
 @import "./../vendor/bootstrap/scss/bootstrap.scss";
 
 ////////////////////
@@ -99,7 +101,7 @@
 ////////////////////
 // Version Color
 ////////////////////
-@import "./layout/version-dark/main";
+//@import "./layout/version-dark/main";
 
 
 ////////////////////

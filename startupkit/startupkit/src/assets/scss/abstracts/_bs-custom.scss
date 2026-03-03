@@ -1,4 +1,6 @@
 //to ignore cli warning about deprecated mixin
+@use "sass:map";
+@use "sass:color";
 $enable-deprecation-messages: false;
 $ignore-warning             : true;
 
@@ -52,7 +54,7 @@ $cream  : #EFD0C7;
 $grays: () !default;
 
 // stylelint-disable-next-line scss/dollar-variable-default
-$grays: map-merge((
+$grays: map.merge((
     "100": $gray-100,
     "200": $gray-200,
     "300": $gray-300,
@@ -62,7 +64,7 @@ $grays: map-merge((
     "700": $gray-700,
     "800": $gray-800,
     "900": $gray-900),
-$grays);
+  $grays);
 
 
 $muted     : #89879f;
@@ -72,7 +74,7 @@ $ebony-clay: #232833;
 
 $colors: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
-$colors: map-merge((
+$colors: map.merge((
 	"blue": $blue,
     "indigo": $indigo,
     "purple": $purple,
@@ -103,8 +105,8 @@ $tryal-gradient:linear-gradient(212.43deg, #886CC0 19.43%, #AA6CC0 87.63%);
 $theme-colors: () !default;
 
 // stylelint-disable-next-line scss/dollar-variable-default
-$theme-colors: map-merge(
-(
+$theme-colors: map.merge(
+  (
 	"primary": $primary,
     "secondary": $secondary,
     "success": $success,
@@ -113,7 +115,7 @@ $theme-colors: map-merge(
     "danger": $danger,
     "light": $light,
     "dark": $dark),
-$theme-colors);
+  $theme-colors);
 
 $heading-primary-size: 1.8rem;
 $sub-heading-size    : 1.6rem !default;
